@@ -1,0 +1,33 @@
+{
+  "index": {
+    "analysis": {
+      "analyzer": {
+        "vi_analyzer": {
+          "type": "custom",
+          "tokenizer": "vi_tokenizer",
+          "filter": [
+            "lowercase",
+            "vi_stop",
+            "vi_normalizer"
+          ]
+        }
+      },
+      "filter": {
+        "vi_stop": {
+          "type": "stop",
+          "stopwords": "_vietnamese_"
+        },
+        "vi_normalizer": {
+          "type": "icu_normalizer",
+          "name": "nfkc_cf"
+        }
+      },
+      "tokenizer": {
+        "vi_tokenizer": {
+          "type": "vi_tokenizer",
+          "dict_path": "/usr/local/share/tokenizer/dicts"
+        }
+      }
+    }
+  }
+}

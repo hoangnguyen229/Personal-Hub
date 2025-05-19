@@ -1,0 +1,156 @@
+/* Tạo container đầy đủ kích thước màn hình */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Tạo wrapper để căn giữa */
+app-register, /* Component wrapper selector */
+:host, /* Component host selector */
+body { /* Fallback nếu không dùng trong Angular component */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f5f7fa; /* Màu nền nhẹ cho màn hình */
+}
+
+.register-container {
+    max-width: 420px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.register-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.register-container .logo-img {
+    display: block;
+    margin: 0 auto 2rem;
+    max-width: 150px; /* Adjust this value based on your logo's ideal size */
+    height: auto;
+    transition: all 0.3s ease;
+}
+
+.register-container .logo-img:hover {
+    transform: scale(1.05);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Style cho các trường nhập */
+::ng-deep app-textfield input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #f9f9f9;
+    transition: all 0.3s;
+}
+
+::ng-deep app-textfield input:focus {
+    border-color: #4285f4;
+    box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+    background-color: #ffffff;
+}
+
+/* Style cho nút đăng ký */
+::ng-deep app-button button {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4285f4, #346ac3);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+::ng-deep app-button button:hover {
+    background: linear-gradient(135deg, #346ac3, #264d9e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(66, 133, 244, 0.3);
+}
+
+.error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-top: -30px;
+}
+
+.social-login {
+    margin-top: 2rem;
+    text-align: center;
+    position: relative;
+}
+
+.social-login p {
+    display: inline-block;
+    padding: 0 15px;
+    background-color: #fff;
+    position: relative;
+    z-index: 1;
+    color: #757575;
+    font-size: 0.9rem;
+}
+
+.login-link {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.login-link p {
+    color: #5f6368;
+    font-size: 0.95rem;
+}
+
+.login-link a {
+    color: #4285f4;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 0.25rem;
+    transition: all 0.2s;
+}
+
+.login-link a:hover {
+    color: #346ac3;
+    text-decoration: underline;
+}
+
+/* Thêm hiệu ứng chuyển động */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.register-container {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Responsive styling */
+@media (max-width: 480px) {
+    .register-container {
+        max-width: 90%;
+        margin: 0;
+        padding: 1.5rem;
+    }
+}

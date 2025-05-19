@@ -1,0 +1,87 @@
+<div class="user-profile-container">
+  <div class="profile-header">
+    <!-- Avatar Section -->
+    <div class="avatar-section">
+      <img [src]="user?.profile_picture || 'assets/images/default-avatar.jpg'" alt="User avatar" class="avatar">
+    </div>
+
+    <!-- User Info Section -->
+    <div class="user-info">
+      <h1 class="username">{{ user?.username || 'Username' }}</h1>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-count">{{ userFollowers.length }}</span>
+          <span class="stat-label">Followers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-count">{{ userFollowing.length }}</span>
+          <span class="stat-label">Following</span>
+        </div>
+      </div>
+      <!-- Conditional Button -->
+      <button class="btn-update" *ngIf="isCurrentUser" (click)="navigateToProfile()">Update Info</button>
+      <button class="btn-follow" *ngIf="!isCurrentUser" (click)="toggleFollow()" [disabled]="isLoading">
+        {{ isFollowing ? 'Unfollow' : 'Follow' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Bio Section -->
+  <div class="bio-section">
+    <p class="bio">{{ user?.bio || 'This user has not added a bio yet.' }}</p>
+  </div>
+
+  <!-- Tabs Section -->
+  <div class="profile-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'posts'" (click)="changeTab('posts')">
+      Posts
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'followers'" (click)="changeTab('followers')">
+      Followers
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'following'" (click)="changeTab('following')">
+      Following
+    </button>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    <!-- Posts Tab -->
+    <div class="posts-list" *ngIf="activeTab === 'posts'">
+      <div class="post-card" *ngFor="let post of userPosts" [routerLink]="['/blog', post.slug]" style="cursor: pointer;">
+        <h3 class="post-title">{{ post.title }}</h3>
+        <p class="post-date">{{ post.createdAt | date:'mediumDate' }}</p>
+        <p class="post-content">{{ post.content | slice:0:100 }}{{ post.content.length > 100 ? '...' : '' }}</p>
+      </div>
+      <div class="empty-state" *ngIf="!userPosts || userPosts.length === 0">
+        <p class="empty-text">No posts yet</p>
+      </div>
+    </div>
+
+    <!-- Followers Tab -->
+    <div class="followers-list" *ngIf="activeTab === 'followers'">
+      <div class="follower-item" *ngFor="let follower of userFollowers" (click)="navigateToUserProfile(follower.follower_user?.email)" style="cursor: pointer;">
+        <img [src]="follower.follower_user?.profile_picture || 'assets/images/default-avatar.jpg'" alt="Follower avatar" class="follower-avatar">
+        <div class="follower-info">
+          <span class="follower-username">{{ follower.follower_user?.username || 'Unknown' }}</span>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="!userFollowers || userFollowers.length === 0">
+        <p class="empty-text">No followers yet</p>
+      </div>
+    </div>
+
+    <!-- Following Tab -->
+    <div class="following-list" *ngIf="activeTab === 'following'">
+      <div class="following-item" *ngFor="let following of userFollowing" (click)="navigateToUserProfile(following.following_user?.email)" style="cursor: pointer;">
+        <img [src]="following.following_user?.profile_picture || 'assets/images/default-avatar.jpg'" alt="Following avatar" class="following-avatar">
+        <div class="following-info">
+          <span class="following-username">{{ following.following_user?.username || 'Unknown' }}</span>
+        </div>
+      </div>
+      <div class="empty-state" *ngIf="!userFollowing || userFollowing.length === 0">
+        <p class="empty-text">No following yet</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="login-container">
+    <img src="assets/icons/Logo.svg" alt="Logo" class="logo-img">
+
+    <div class="social-login">
+        <div class="social-buttons">
+            <button class="google-btn" (click)="onGoogleLogin()">
+                <img src="assets/icons/google.png" alt="Google" />
+                Login with Google
+            </button>
+            <button class="github-btn" (click)="onGithubLogin()">
+                <img src="assets/icons/github.png" alt="GitHub" />
+                Login with GitHub
+            </button>
+        </div>
+        <div class="divider">
+            <span>Or</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <app-textfield type="email" placeholder="Email" [(value)]="userLogin.email"></app-textfield>
+        <div class="error-message" *ngIf="isSubmitted && errors['email']">
+            {{ errors['email'] }}
+        </div>
+        
+        <app-textfield type="password" placeholder="Password" [(value)]="userLogin.password"></app-textfield>
+        <div class="error-message" *ngIf="isSubmitted && errors['password']">
+            {{ errors['password'] }}
+        </div>
+        
+        <app-button label="Login" (onClick)="onLogin()"></app-button>
+
+        <div class="forgot-password-link">
+            <a routerLink="/auth/forgot-password">Forgot password?</a>
+        </div>
+        <div class="register-link">
+            <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
+        </div>
+    </div>
+</div>

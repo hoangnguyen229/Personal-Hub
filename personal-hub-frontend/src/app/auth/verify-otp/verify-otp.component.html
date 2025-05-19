@@ -1,0 +1,56 @@
+<div class="auth-container">
+    <img src="assets/icons/Logo.svg" alt="Logo" class="logo-img">
+    <h2>Verify OTP</h2>
+    
+    <div class="form-group">
+      <p class="form-subtitle">
+        Enter the 6-digit code sent to your email address
+      </p>
+      
+      <div class="otp-container">
+        <input
+            *ngFor="let digit of otpDigits; let i = index"
+            id="otp-{{i}}"
+            type="text"
+            maxlength="1"
+            class="otp-input"
+            (keyup)="onDigitInput($event, i)"
+            (paste)="onPaste($event)"
+            [value]="otpDigits[i]"
+            >
+      </div>
+      
+      <div class="error-message" *ngIf="isSubmitted && errors['otp']">
+        {{ errors['otp'] }}
+      </div>
+      
+      <div class="timer">
+        Time remaining: <span>{{ formatTime() }}</span>
+      </div>
+      
+      <app-button 
+        [label]="isLoading ? 'Verifying...' : 'Verify OTP'" 
+        (onClick)="onSubmit()"
+      >
+      </app-button>
+      
+      <div class="resend-otp">
+        <p>
+          Didn't receive the code? 
+          <a 
+            href="javascript:void(0)" 
+            [class.disabled]="remainingTime > 0"
+            (click)="resendOTP()"
+          >
+            Resend OTP{{ remainingTime > 0 ? ' in ' + formatTime() : '' }}
+          </a>
+        </p>
+      </div>
+      
+      <div class="back-link">
+        <p>
+          <a routerLink="/forgot-password">Back to Forgot Password</a>
+        </p>
+      </div>
+    </div>
+  </div>

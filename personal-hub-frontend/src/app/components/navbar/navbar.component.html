@@ -1,0 +1,98 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/dashboard">
+      <img src="assets/icons/Logo.svg" alt="Logo" class="logo-img">
+    </a>
+    
+    <div class="nav-links">
+      <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
+      <a class="nav-link" routerLink="/about-me" routerLinkActive="active">About Me</a>
+    </div>
+    
+    <div class="nav-right">
+      <div class="search-container">
+        <div class="search-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor" />
+          </svg>
+        </div>
+        <input 
+          type="text" 
+          placeholder="Search" 
+          class="search-input"
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInputChange($event.target.value)"
+          (blur)="hideSuggestions()"
+          (keydown.enter)="onKeydown($event)"
+        >
+
+        <div class="suggestions" *ngIf="showSuggestions && (tagSuggestions.length > 0 || titleSuggestions.length > 0)">
+          <ul>
+            <li *ngFor="let tag of tagSuggestions" (click)="selectTag(tag)">
+              #{{ tag }}
+            </li>
+            <li *ngFor="let title of titleSuggestions" (click)="selectTitle(title)">
+              {{ title }}
+            </li>
+          </ul>
+
+        </div>
+      </div>
+      <button class="write-btn" (click)="redirectEditor()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M14 4a.5.5 0 0 0 0-1v1zm7 6a.5.5 0 0 0-1 0h1zm-7-7H4v1h10V3zM3 4v16h1V4H3zm1 17h16v-1H4v1zm17-1V10h-1v10h1zm-1 1a1 1 0 0 0 1-1h-1v1zM3 20a1 1 0 0 0 1 1v-1H3zM4 3a1 1 0 0 0-1 1h1V3z" fill="currentColor"/>
+          <path d="M17.5 4.5l-8.46 8.46a.25.25 0 0 0-.06.1l-.82 2.47c-.07.2.12.38.31.31l2.47-.82a.25.25 0 0 0 .1-.06L19.5 6.5m-2-2l2.32-2.32c.1-.1.26-.1.36 0l1.64 1.64c.1.1.1.26 0 .36L19.5 6.5" stroke="currentColor"/>
+        </svg>
+        Write
+      </button>
+      
+      <!-- Nút thông báo chỉ hiển thị khi đã đăng nhập -->
+      <button class="notification-btn" routerLink="/notifications" *ngIf="isLoggedIn()">
+        <div class="notification-icon-wrapper">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 17h5l-1.4-1.4c-.3-.3-.6-1.2-.6-1.7V9c0-2.2-1.8-4-4-4-1.1 0-2.1.5-2.8 1.2-.7-.7-1.7-1.2-2.8-1.2-2.2 0-4 1.8-4 4v4.9c0 .5-.3 1.4-.6 1.7L3 17h5v1c0 1.1.9 2 2 2s2-.9 2-2v-1z" stroke="currentColor" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- Hiển thị badge khi có thông báo chưa đọc -->
+          <span class="notification-badge" *ngIf="unreadNotificationCount > 0">
+            {{ unreadNotificationCount > 99 ? '99+' : unreadNotificationCount }}
+          </span>
+        </div>
+      </button>
+
+      <!-- Nút đăng nhập khi chưa đăng nhập -->
+      <ng-container *ngIf="!isLoggedIn()">
+        <button class="login-btn" routerLink="/auth/login">
+          Login
+        </button>
+      </ng-container>
+
+      <!-- Hiển thị avatar người dùng khi đã đăng nhập -->
+      <div class="user-menu-container" *ngIf="isLoggedIn()" (clickOutside)="closeDropdown()">
+        <div class="user-avatar" (click)="toggleDropdown($event)">
+          <img [src]="getProfileImageUrl()" alt="User avatar" class="avatar-img">
+        </div>
+        <div class="dropdown-menu" [class.show]="isDropdownOpen">
+          <div class="dropdown-header">
+            <div class="user-info">
+              <p class="username">{{ currentUser?.username }}</p>
+              <p class="email">{{ currentUser?.email }}</p>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="navigateToProfile()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+            </svg>
+            Profile Information
+          </a>
+          <a class="dropdown-item" (click)="logout()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" fill="currentColor"/>
+            </svg>
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

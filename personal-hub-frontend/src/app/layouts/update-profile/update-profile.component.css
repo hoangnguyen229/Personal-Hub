@@ -1,0 +1,235 @@
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0px 20px;
+  }
+  
+  .header {
+    text-align: center;
+  }
+  
+  .header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #292929;
+    margin: 0 0 8px 0;
+  }
+  
+  .header p {
+    font-size: 16px;
+    color: #6b6b6b;
+    margin: 0;
+  }
+  
+  .content-wrapper {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+  }
+  
+  .profile-form-container {
+    padding: 16px;
+  }
+  
+  .profile-picture-section {
+    display: flex;
+    justify-content: center;
+    /* margin-bottom: 32px; */
+  }
+  
+  .profile-picture-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-picture-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  
+  .profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .picture-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 8px 0;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .profile-picture-wrapper:hover .picture-controls {
+    opacity: 1;
+  }
+  
+  .upload-btn, .remove-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 8px;
+    margin: 0 4px;
+  }
+  
+  .upload-btn:hover, .remove-btn:hover {
+    text-decoration: underline;
+  }
+  
+  .file-input {
+    display: none;
+  }
+  
+  .image-hint {
+    font-size: 12px;
+    color: #6b6b6b;
+    margin-top: 4px;
+  }
+  
+  .form-fields {
+    margin-bottom: 32px;
+  }
+  
+  .form-group {
+    margin-bottom: 24px;
+    position: relative;
+  }
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #292929;
+    margin-bottom: 8px;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #292929;
+    box-shadow: 0 0 0 2px rgba(41, 41, 41, 0.1);
+  }
+  
+  .form-control.is-invalid {
+    border-color: #dc3545;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  
+  .character-count {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    font-size: 12px;
+    color: #6b6b6b;
+  }
+  
+  .button-section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+  
+  .btn {
+    padding: 10px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-cancel {
+    background: none;
+    border: 1px solid #ddd;
+    color: #6b6b6b;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .btn-save {
+    background-color: #292929;
+    border: 1px solid #292929;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .btn-save:hover {
+    background-color: #111;
+  }
+  
+  .btn-save:disabled {
+    background-color: #bbb;
+    border-color: #bbb;
+    cursor: not-allowed;
+  }
+  
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .profile-container {
+      padding: 20px 16px;
+    }
+    
+    .profile-form-container {
+      padding: 24px;
+    }
+    
+    .button-section {
+      flex-direction: column-reverse;
+      gap: 12px;
+    }
+    
+    .btn {
+      width: 100%;
+    }
+  }

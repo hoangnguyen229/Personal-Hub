@@ -1,0 +1,72 @@
+<div class="editor-page">
+  <div class="editor-container">
+    <div class="editor-header">
+      <h1>Create New Post</h1>
+      <div class="action-buttons">
+        <button class="btn btn-secondary me-2" id="save-draft" (click)="saveDraft()">Save Draft</button>
+        <button class="btn btn-primary" id="publish" (click)="publishPost()" [disabled]="isLoading">
+          <span *ngIf="isLoading">Publishing...</span>
+          <span *ngIf="!isLoading">Publish</span>
+        </button>
+      </div>
+    </div>
+    
+    <div class="editor-content">
+      <form [formGroup]="blogForm">
+        <div class="title-section">
+          <input 
+            type="text" 
+            class="title-input" 
+            placeholder="Enter your post title..."
+            formControlName="blogTitle">
+          <div class="error-message" *ngIf="blogForm.get('blogTitle').touched && blogForm.get('blogTitle').invalid">
+            Title cannot be empty
+          </div>
+        </div>
+        
+        <div class="category-section">
+          <label for="category">Category:</label>
+          <select 
+            id="category" 
+            class="category-select"
+            formControlName="selectedCategoryId">
+            <option [ngValue]="0" disabled>Select a category</option>
+            <option *ngFor="let category of categories" [ngValue]="category.categoryID">{{ category.name }}</option>
+          </select>
+          <div class="error-message" *ngIf="blogForm.get('selectedCategoryId').touched && blogForm.get('selectedCategoryId').invalid">
+            Please select a category
+          </div>
+        </div>
+        
+        <div class="content-section">
+          <ejs-richtexteditor 
+            #rteInstance
+            formControlName="blogContent"
+            placeholder="Start writing your amazing post..."
+            [toolbarSettings]="tools"
+            [quickToolbarSettings]="quickToolbarSettings"
+            [insertImageSettings]="insertImageSettings"
+            (created)="onEditorCreated()"
+            (valueChange)="  onValueChange($event)"
+            (imageUploading)="onImageUpload($event)"
+            >
+          </ejs-richtexteditor>
+          <div class="error-message" *ngIf="blogForm.get('blogContent').touched && blogForm.get('blogContent').invalid">
+            Content cannot be empty
+          </div>
+        </div>
+      </form>
+      
+      <div class="editor-footer">
+        <div class="word-count">Word count: {{ wordCount }}</div>
+        <div class="action-buttons">
+          <button class="btn btn-secondary mr-2" id="preview" (click)="previewPost()">Preview</button>
+          <button class="btn btn-primary" id="publish-mobile" (click)="publishPost()" [disabled]="isLoading">
+            <span *ngIf="isLoading">Publishing...</span>
+            <span *ngIf="!isLoading">Publish</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

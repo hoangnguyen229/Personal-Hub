@@ -1,0 +1,248 @@
+.user-profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.avatar-section {
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  flex-grow: 1;
+}
+
+.username {
+  font-size: 24px;
+  font-weight: 600;
+  color: #292929;
+  margin: 0 0 8px 0;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-count {
+  font-size: 16px;
+  font-weight: 500;
+  color: #292929;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+.btn-update {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #292929;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-update:hover {
+  background-color: #111;
+}
+
+/* Các style hiện tại giữ nguyên, chỉ thêm style cho nút Follow */
+.btn-follow {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  background-color: #292929; /* Màu xanh cho nút Follow */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-follow:hover {
+  background-color: #6c757d; /* Màu xanh đậm hơn khi hover */
+}
+
+.btn-follow:disabled {
+  background-color: #6c757d; /* Màu xám khi disabled */
+  cursor: not-allowed;
+}
+
+.bio-section {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.bio {
+  font-size: 14px;
+  color: #292929;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 8px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b6b6b;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn.active {
+  background-color: #292929;
+  color: #fff;
+}
+
+.tab-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.tab-content {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+}
+
+.posts-list, .followers-list, .following-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.post-card, .follower-item, .following-item {
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+.post-card:last-child, .follower-item:last-child, .following-item:last-child {
+  border-bottom: none;
+}
+
+.post-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #292929;
+  margin: 0 0 8px 0;
+}
+
+.post-date {
+  font-size: 12px;
+  color: #6b6b6b;
+  margin: 0 0 8px 0;
+}
+
+.post-content {
+  font-size: 14px;
+  color: #292929;
+  margin: 0;
+}
+
+.follower-item, .following-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.follower-avatar, .following-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.follower-username, .following-username {
+  font-size: 14px;
+  font-weight: 500;
+  color: #292929;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.empty-text {
+  font-size: 14px;
+  color: #6b6b6b;
+  margin: 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .user-profile-container {
+    padding: 16px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
+
+  .btn-update {
+    width: 100%;
+  }
+
+  .profile-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .tab-btn {
+    width: 100%;
+  }
+}

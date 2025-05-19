@@ -1,0 +1,83 @@
+<div class="profile-container">
+    <div class="header">
+      <h1>Edit Profile</h1>
+      <p>Update your personal information</p>
+    </div>
+  
+    <div class="content-wrapper">
+      <div class="profile-form-container">
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <!-- Profile Picture Section -->
+          <div class="profile-picture-section">
+            <div class="profile-picture-container">
+              <div class="profile-picture-wrapper">
+                <img [src]="imagePreview || 'assets/images/default-avatar.jpg'" alt="Profile picture" class="profile-picture">
+                
+                <div class="picture-controls">
+                  <label for="profile-upload" class="upload-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M19 7v11c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2zm-2 0H7v11h10V7zm-5 5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-3c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-1 7h2v-2c0-.55-.45-1-1-1s-1 .45-1 1v2z" fill="currentColor"/>
+                    </svg>
+                    Change
+                  </label>
+                  <!-- <button type="button" class="remove-btn" *ngIf="imagePreview" (click)="removeImage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
+                    </svg>
+                    Remove
+                  </button> -->
+                </div>
+                
+                <input type="file" id="profile-upload" (change)="onFileSelected($event)" accept="image/png, image/jpeg, image/jpg" class="file-input">
+              </div>
+              <p class="image-hint">Recommended: Square JPG, PNG. Max 2MB.</p>
+            </div>
+          </div>
+  
+          <!-- Form Fields -->
+          <div class="form-fields">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input 
+                type="text" 
+                id="username" 
+                formControlName="username" 
+                class="form-control"
+                [class.is-invalid]="profileForm.get('username')?.invalid && (profileForm.get('username')?.dirty || profileForm.get('username')?.touched)"
+                placeholder="Your username">
+              <!-- <div class="error-message" *ngIf="profileForm.get('username')?.invalid && (profileForm.get('username')?.dirty || profileForm.get('username')?.touched)">
+                <span *ngIf="profileForm.get('username')?.errors?.['required']">Username is required</span>
+                <span *ngIf="profileForm.get('username')?.errors?.['minlength']">Username must be at least 3 characters</span>
+              </div> -->
+            </div>
+            
+            <div class="form-group">
+              <label for="bio">Bio</label>
+              <textarea 
+                id="bio" 
+                formControlName="bio" 
+                class="form-control"
+                [class.is-invalid]="profileForm.get('bio')?.invalid && (profileForm.get('bio')?.dirty || profileForm.get('bio')?.touched)"
+                placeholder="Tell us about yourself"
+                rows="4"></textarea>
+              <!-- <div class="error-message" *ngIf="profileForm.get('bio')?.invalid && (profileForm.get('bio')?.dirty || profileForm.get('bio')?.touched)">
+                <span *ngIf="profileForm.get('bio')?.errors?.['maxlength']">Bio cannot exceed 200 characters</span>
+              </div> -->
+              <div class="character-count">
+                {{ profileForm.get('bio')?.value?.length || 0 }}/200
+              </div>
+            </div>
+          </div>
+  
+          <!-- Button Section -->
+          <div class="button-section">
+            <button type="button" class="btn btn-cancel" routerLink="/">Cancel</button>
+            <button type="submit" class="btn btn-save" [disabled]="profileForm.invalid || isLoading">
+              <span *ngIf="isLoading" class="spinner"></span>
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

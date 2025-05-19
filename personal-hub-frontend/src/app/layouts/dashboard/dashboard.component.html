@@ -1,0 +1,94 @@
+<!-- dashboard.component.html -->
+<div class="blog-container">
+  <div class="main-content">
+    <!-- Hiển thị tiêu đề nếu đang tìm kiếm -->
+    <div *ngIf="searchQuery" class="search-results-header">
+      <h2>Search results for "{{ searchQuery }}"</h2>
+    </div>
+
+    <div *ngIf="selectedTag" class="search-results-header">
+      <h2>Posts tagged with "{{ selectedTag }}"</h2>
+    </div>
+    
+    <!-- Loading indicator and error message -->
+    <div *ngIf="loading" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden"></span>
+      </div>
+    </div>
+    
+    <div *ngIf="error" class="alert alert-danger">
+      {{ error }}
+    </div>
+    
+    <!-- Featured Articles -->
+    <div class="articles-list" *ngIf="!loading && !error">
+      <!-- No posts message -->
+      <div *ngIf="blogPosts.length === 0" class="no-posts-message">
+        <p>No blog posts found. Check back later!</p>
+      </div>
+      
+      <!-- Article Items - Dynamic -->
+      <div class="article-item" *ngFor="let post of blogPosts">
+        <div class="article-meta">
+          <!-- Display either topic icon or author avatar based on what's available -->
+          <ng-container *ngIf="post.topic; else authorAvatar">
+            <img [src]="post.topic.iconUrl" [alt]="post.topic.name" class="topic-icon">
+            <span class="topic-name">{{ post.topic.name }}</span>
+          </ng-container>
+          <ng-template #authorAvatar>
+            <img [src]="post.author?.avatarUrl || 'assets/images/NguyenVanHoang.jpg'" 
+                [alt]="post.author?.name || 'Author'" 
+                class="author-avatar">
+            <span class="author-name">{{ post.author?.name || 'Unknown Author' }}</span>
+          </ng-template>
+        </div>
+        
+        <!-- Make the content clickable with routerLink -->
+        <div class="article-content" [routerLink]="['/blog', post.slug]" style="cursor: pointer;">
+          <div class="article-text">
+            <h2 class="article-title">{{ post.title }}</h2>
+            <p class="article-excerpt">{{ post.excerpt }}</p>
+            
+            <div class="article-footer">
+              <span class="publish-date">{{ post.publishDate }}</span>
+              <div class="stats">
+                <span class="likes">
+                  <fa-icon [icon]="faThumbsUp"></fa-icon> 
+                  {{ post.likes }}
+                </span>
+                <span class="comments">
+                  <fa-icon [icon]="faComment"></fa-icon> 
+                  {{ post.commentCount}}
+                </span>
+              </div>
+              <!-- <div class="actions">
+                <button class="bookmark-btn"><i class="fa fa-bookmark"></i></button>
+                <button class="more-btn"><i class="fa fa-ellipsis-h"></i></button>
+              </div> -->
+            </div>
+          </div>
+          
+          <div class="article-image">
+            <img [src]="post.imageUrl" [alt]="post.title">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pagination controls if needed -->
+      <div class="pagination-controls" *ngIf="blogPosts.length > 0">
+        <button class="btn btn-previous" 
+                [disabled]="currentPage === 0" 
+                (click)="loadPreviousPage()">
+          Previous
+        </button>
+        <span class="page-info">Page {{ currentPage + 1 }}</span>
+        <button class="btn btn-next" 
+                (click)="loadNextPage()">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

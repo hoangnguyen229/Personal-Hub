@@ -1,0 +1,53 @@
+<div class="notifications-container">
+  <div class="notifications-header">
+    <h1>Notification</h1>
+    <div class="notifications-actions">
+      <button class="mark-all-btn" (click)="markAllAsRead()" *ngIf="hasUnreadNotifications()">
+        Mark as read
+      </button>
+      <button class="clear-all-btn" (click)="clearAllNotifications()" *ngIf="hasNotifications()">
+        Delete all
+      </button>
+    </div>
+  </div>
+
+  <div class="notifications-tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'all'" (click)="changeTab('all')">
+      All
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'unread'" (click)="changeTab('unread')">
+      Unread <span class="badge" *ngIf="hasUnreadNotifications()">{{ getUnreadNotificationCount() }}</span>
+    </button>
+  </div>
+
+  <div class="notifications-list" *ngIf="filteredNotifications.length > 0">
+    <div *ngFor="let notification of filteredNotifications" 
+         class="notification-item" 
+         [class.unread]="!notification.is_read"
+         (click)="markAsRead(notification)">
+         <img [src]="getUserImageUrl(notification)" alt="User image" class="avatar-img">
+      <div class="notification-content">
+        <div class="notification-text">{{ notification.content }}</div>
+        <div class="notification-time">{{ dateUtilService.getRelativeTimeFromNow(notification.created_at) }}</div>
+      </div>
+      <div class="notification-actions">
+        <button class="delete-btn" (click)="deleteNotification(notification.notification_id); $event.stopPropagation();">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="filteredNotifications.length === 0">
+    <div class="empty-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+        <path d="M15 17h5l-1.4-1.4c-.3-.3-.6-1.2-.6-1.7V9c0-2.2-1.8-4-4-4-1.1 0-2.1.5-2.8 1.2-.7-.7-1.7-1.2-2.8-1.2-2.2 0-4 1.8-4 4v4.9c0 .5-.3 1.4-.6 1.7L3 17h5v1c0 1.1.9 2 2 2s2-.9 2-2v-1z" 
+              stroke="#CBD5E0" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <p class="empty-text">{{ activeTab === 'all' ? 'No notifications yet' : 'No unread notifications' }}</p>
+      <p class="empty-subtext">We'll notify you when there's something new</p>
+  </div>
+</div>

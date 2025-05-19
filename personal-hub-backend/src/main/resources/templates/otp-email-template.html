@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Verification Code</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .otp-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 15px;
+            background-color: #f5f7fa;
+            border-radius: 5px;
+        }
+        .otp-code {
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 5px;
+            color: #3498db;
+            padding: 10px 0;
+        }
+        .info {
+            background-color: #f8f4e5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #f0ad4e;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .contact {
+            margin-top: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 th:text="${appName}">Personal Hub</h1>
+    </div>
+
+    <div class="content">
+        <p>Hello <strong th:text="${username}">User</strong>,</p>
+
+        <p>We received a request to reset the password for your account. Please use the verification code below to verify your identity:</p>
+
+        <div class="otp-container">
+            <div class="otp-code" th:text="${otp}">123456</div>
+        </div>
+
+        <div class="info">
+            <p>This verification code will expire in <strong th:text="${validityMinutes}">5</strong> minutes.</p>
+        </div>
+
+        <div class="contact">
+            <p>If you encounter any issues, please contact us via email or our support phone number.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2025</span> <span th:text="${appName}">Personal Hub</span>. All rights reserved.</p>
+        <p>This is an automated email, please do not reply.</p>
+    </div>
+</div>
+</body>
+</html>

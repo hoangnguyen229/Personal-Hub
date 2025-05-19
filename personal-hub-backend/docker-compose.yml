@@ -1,0 +1,72 @@
+services:
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_volume_data:/data
+    networks:
+      - backend
+
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redis_insight
+    restart: unless-stopped
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_insight_volume_data:/db
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq_volume_data:/var/lib/rabbitmq
+    networks:
+      - backend
+
+  elasticsearch:
+    build:
+      context: ./elasticsearch-analysis-vietnamese
+      args:
+        ES_VERSION: 8.7.0
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - 9200:9200
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        hard: -1
+        soft: -1
+    environment:
+      - ES_JAVA_OPTS=-Xmx2g -Xms2g
+#      - ELASTIC_USERNAME=elastic
+#      - ELASTIC_PASSWORD=changeme # Ensure this is set in your .env file
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=false  # You can set to false if you don't need security
+    networks:
+      - backend
+
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:
+  rabbitmq_volume_data:
+
+networks:
+  backend:
+    driver: bridge

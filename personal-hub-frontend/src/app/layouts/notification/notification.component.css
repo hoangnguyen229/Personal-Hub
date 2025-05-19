@@ -1,0 +1,226 @@
+.notifications-container {
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px 20px;
+  }
+  
+  .notifications-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .notifications-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    color: #1A202C;
+  }
+  
+  .notifications-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .mark-all-btn, .clear-all-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #4A86E8;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .mark-all-btn:hover, .clear-all-btn:hover {
+    background-color: rgba(74, 134, 232, 0.1);
+  }
+  
+  .clear-all-btn {
+    color: #E53E3E;
+  }
+  
+  .clear-all-btn:hover {
+    background-color: rgba(229, 62, 62, 0.1);
+  }
+  
+  .notifications-tabs {
+    display: flex;
+    padding: 0 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 16px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4A5568;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .tab-btn:hover {
+    color: #1A202C;
+  }
+  
+  .tab-btn.active {
+    color: #4A86E8;
+  }
+  
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #4A86E8;
+  }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4A86E8;
+    color: white;
+    font-size: 12px;
+    border-radius: 10px;
+    padding: 2px 6px;
+    min-width: 18px;
+    height: 18px;
+    font-weight: 600;
+  }
+  
+  .notifications-list {
+    max-height: 378px;
+    overflow-y: auto;
+  }
+  
+  .notification-item {
+    display: flex;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .notification-item:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .notification-item.unread {
+    background-color: rgb(9 33 71 / 12%);
+  }
+
+  .avatar-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right:16px;
+  }
+  
+  .notification-content {
+    flex: 1;
+  }
+  
+  .notification-text {
+    font-size: 14px;
+    color: #2D3748;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  
+  .notification-time {
+    font-size: 12px;
+    color: #718096;
+  }
+  
+  .notification-actions {
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .notification-item:hover .notification-actions {
+    opacity: 1;
+  }
+  
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #A0AEC0;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .delete-btn:hover {
+    color: #E53E3E;
+    background-color: rgba(229, 62, 62, 0.1);
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    text-align: center;
+  }
+  
+  .empty-icon {
+    margin-bottom: 16px;
+    color: #CBD5E0;
+  }
+  
+  .empty-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2D3748;
+    margin: 8px 0;
+  }
+  
+  .empty-subtext {
+    font-size: 14px;
+    color: #718096;
+    margin: 0;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 840px) {
+    .notifications-container {
+      margin: 20px;
+      width: calc(100% - 40px);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .notifications-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .notifications-actions {
+      margin-top: 12px;
+    }
+    
+    .notification-item {
+      padding: 16px;
+    }
+    
+    .tab-btn {
+      padding: 12px;
+      flex: 1;
+      justify-content: center;
+    }
+  }
