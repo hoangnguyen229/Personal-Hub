@@ -69,6 +69,15 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public UserResponse updateOnlineStatus(Long userId, boolean showOnlineStatus) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCodeEnum.USER_NOT_FOUND));
+        user.setShowOnlineStatus(showOnlineStatus);
+        userRepository.save(user);
+        return mapToUserResponse(user);
+    }
+
     private UserResponse mapToUserResponse(User user){
         return UserResponse.builder()
                 .userID(user.getUserID())
@@ -77,6 +86,7 @@ public class UserServiceImpl implements UserService {
                 .bio(user.getBio())
                 .profilePic(user.getProfilePic())
                 .authType(user.getAuthType().getValue())
+                .showOnlineStatus(user.getShowOnlineStatus())
                 .build();
     }
 }

@@ -80,7 +80,8 @@ export class LoginComponent {
     }
 
     private handleLoginError(error: any): void {
-        this.toastr.error(error.error.message || 'Login failed');
+        debugger;
+        this.toastr.error('Login failed');
         
         if (error.error.errors) {
             this.errors = { ...this.errors, ...error.error.errors };

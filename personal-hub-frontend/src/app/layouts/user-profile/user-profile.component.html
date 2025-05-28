@@ -23,6 +23,9 @@
       <button class="btn-follow" *ngIf="!isCurrentUser" (click)="toggleFollow()" [disabled]="isLoading">
         {{ isFollowing ? 'Unfollow' : 'Follow' }}
       </button>
+      <button class="btn-message" *ngIf="!isCurrentUser" (click)="navigateToMessage()" [disabled]="isLoading">
+          Message
+      </button>
     </div>
   </div>
 

@@ -3,6 +3,7 @@ import { Client, Message } from '@stomp/stompjs';
 import * as SockJS from 'sockjs-client';
 import { AuthService } from './auth.service';
 import { Notification } from '../models/notification.model';
+import { Messages } from '../models/messages.model'
 import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from './notification.service';
@@ -13,8 +14,9 @@ import { NotificationService } from './notification.service';
 export class WebSocketService {
   private stompClient: Client | undefined;
   private notificationsSubject = new BehaviorSubject<any>([]);
+  private messagesSubject = new BehaviorSubject<any>([]);
   public notifications$ = this.notificationsSubject.asObservable();
-  private message : Message | any;
+  public messages$ = this.messagesSubject.asObservable();
 
   constructor(
     private authService: AuthService,
@@ -43,6 +45,7 @@ export class WebSocketService {
         if (this.stompClient?.connected) {
           console.log("Connection status verified as connected");
           this.subscribeToNotifications();
+          this.subscribeToMessages();
         } else {
           console.error("onConnect called but connection status is false");
         }
@@ -82,6 +85,26 @@ export class WebSocketService {
       }
     } else {
       console.error("StompClient not connected when trying to subscribe");
+    }
+  }
+
+  private subscribeToMessages(): void {
+    if(this.stompClient && this.stompClient.connected){
+      const userEmail = this.authService.getCurrentUser()?.email;
+      if(userEmail){
+        console.log("Subscribing MESSAGE channel to:", `/user/${userEmail}/queue/messages`);
+        this.stompClient.subscribe(`/user/queue/messages`, (message) => {
+          try{
+            debugger;
+            const newMessage : Messages = JSON.parse(message.body);
+            this.messagesSubject.next(newMessage);
+          } catch(e){
+            console.error("Error parsing message:", e);
+          }
+        })
+      } else {
+        console.error("No user email found for subscription");
+      }
     }
   }
 

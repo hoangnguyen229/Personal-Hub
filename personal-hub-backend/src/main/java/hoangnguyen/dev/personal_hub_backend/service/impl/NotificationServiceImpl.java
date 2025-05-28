@@ -1,6 +1,7 @@
 package hoangnguyen.dev.personal_hub_backend.service.impl;
 
 import hoangnguyen.dev.personal_hub_backend.config.RabbitMQConfig;
+import hoangnguyen.dev.personal_hub_backend.config.WebSocketConfig;
 import hoangnguyen.dev.personal_hub_backend.dto.response.NotificationResponse;
 import hoangnguyen.dev.personal_hub_backend.dto.response.UserResponse;
 import hoangnguyen.dev.personal_hub_backend.entity.Notification;
@@ -16,6 +17,7 @@ import hoangnguyen.dev.personal_hub_backend.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final RedisTemplate<String, Object> redisTemplate;
     private final SimpMessagingTemplate webSocketTemplate;
+    private final RabbitMQConfig rabbitMQConfig;
+    private final WebSocketConfig webSocketConfig;
 
     @Override
     @Transactional
@@ -48,14 +52,14 @@ public class NotificationServiceImpl implements NotificationService {
         notification.put("type", type.getValue());
         notification.put("timestamp", System.currentTimeMillis());
         rabbitTemplate.convertAndSend(
-                RabbitMQConfig.NOTIFICATION_EXCHANGE,
-                RabbitMQConfig.NOTIFICATION_ROUTING_KEY,
+                rabbitMQConfig.getPersonalHubExchange(),
+                rabbitMQConfig.getNotificationRoutingKey(),
                 notification
         );
     }
 
     @Transactional
-    @RabbitListener(queues = RabbitMQConfig.NOTIFICATION_QUEUE)
+    @RabbitListener(queues = "${rabbitmq.queue.notification.name}")
     public void processNotification(Map<String, Object> notification) {
         String username = (String) notification.get("username");
         String email = (String) notification.get("email");

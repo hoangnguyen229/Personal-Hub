@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { Subject, Subscription } from 'rxjs';
 import { NotificationService } from 'src/app/core/services/notification.service';
-import { WebSocketService } from 'src/app/core/services/websocket.service';
 import { EsSearchService } from 'src/app/core/services/es-search.service';
 import { debounceTime, switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { PostService } from 'src/app/core/services/post.service';
@@ -33,7 +32,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private toastrService: ToastrService,
     private notificationService: NotificationService,
-    private webSocketService: WebSocketService,
     private esSearchService: EsSearchService,
     private postService: PostService
   ) { }
@@ -43,9 +41,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       
       if (user) {
-        // Kết nối WebSocket khi người dùng đăng nhập
-        this.webSocketService.connect();
-        
         // Khởi tạo dữ liệu thông báo
         this.loadNotifications();
         
@@ -55,7 +50,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         });
       } else {
         // Ngắt kết nối WebSocket nếu người dùng đăng xuất
-        this.webSocketService.disconnect();
         this.unreadNotificationCount = 0;
       }
 
@@ -92,9 +86,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.notificationSubscription) {
       this.notificationSubscription.unsubscribe();
     }
-    
-    // Ngắt kết nối WebSocket khi component bị hủy
-    this.webSocketService.disconnect();
   }
 
   onSearchInputChange(query: string): void{

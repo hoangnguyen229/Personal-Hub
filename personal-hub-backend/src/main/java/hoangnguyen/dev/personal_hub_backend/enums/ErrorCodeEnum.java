@@ -49,6 +49,9 @@ public enum ErrorCodeEnum {
     INVALID_NOTIFICATION_TYPE(400, "Invalid notification type", HttpStatus.BAD_REQUEST),
     CANNOT_FOLLOW_YOURSELF(400, "You cannot follow yourself", HttpStatus.BAD_REQUEST),
     SEARCH_FAILED(500, "Search failed", HttpStatus.INTERNAL_SERVER_ERROR),
+    MESSAGE_NOT_FOUND(404, "Message not found", HttpStatus.NOT_FOUND),
+    INVALID_USER_ID(400, "Invalid user ID", HttpStatus.BAD_REQUEST),
+    NO_PENDING_MESSAGES(404, "No pending messages", HttpStatus.NOT_FOUND),
     ;
 
     private final int code;

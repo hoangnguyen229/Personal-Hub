@@ -44,4 +44,11 @@ export class UserService {
       { headers: this.authService.getAuthHeaders() }
     );
   }
+
+  getOnlineUsers(): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/online`, 
+      { headers: this.authService.getAuthHeaders() }
+    );
+  }
 }

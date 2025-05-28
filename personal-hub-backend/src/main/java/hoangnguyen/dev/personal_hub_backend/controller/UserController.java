@@ -4,6 +4,7 @@ import hoangnguyen.dev.personal_hub_backend.dto.request.UserRequest;
 import hoangnguyen.dev.personal_hub_backend.dto.response.UserResponse;
 import hoangnguyen.dev.personal_hub_backend.entity.CustomUserDetail;
 import hoangnguyen.dev.personal_hub_backend.service.UserService;
+import hoangnguyen.dev.personal_hub_backend.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/user")
 public class UserController {
     private final UserService userService;
+    private final UserStatusService userStatusService;
 
     @GetMapping
     public ResponseEntity<UserResponse> getUserById(@AuthenticationPrincipal CustomUserDetail user){
@@ -45,6 +47,23 @@ public class UserController {
             @AuthenticationPrincipal CustomUserDetail userDetail
     ){
         UserResponse userResponse = userService.updateUser(userDetail.getId(), userRequest);
+        return ResponseEntity.ok(userResponse);
+    }
+
+    @GetMapping("/online")
+    public ResponseEntity<List<UserResponse>> getOnlineUser(
+            @AuthenticationPrincipal CustomUserDetail userDetail
+    ){
+        List<UserResponse> onlineUserIds = userStatusService.getOnlineUsers(userDetail.getId());
+        return ResponseEntity.ok(onlineUserIds);
+    }
+
+    @PutMapping("/online-status")
+    public ResponseEntity<UserResponse> updateOnlineStatus(
+            @RequestParam Boolean showOnlineStatus,
+            @AuthenticationPrincipal CustomUserDetail userDetail
+    ){
+        UserResponse userResponse = userService.updateOnlineStatus(userDetail.getId(), showOnlineStatus);
         return ResponseEntity.ok(userResponse);
     }
 }

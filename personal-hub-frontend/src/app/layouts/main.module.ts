@@ -14,6 +14,7 @@ import { RichTextEditorAllModule } from "@syncfusion/ej2-angular-richtexteditor"
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { NotificationComponent } from './notification/notification.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { MessageComponent } from './message/message.component';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -25,6 +26,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
         UpdateProfileComponent,
         NotificationComponent,
         UserProfileComponent,
+        MessageComponent,
     ],
     imports: [
         MainRoutingModule,
