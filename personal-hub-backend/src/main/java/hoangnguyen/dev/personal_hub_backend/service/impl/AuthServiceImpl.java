@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
         user.setAuthType(AuthTypeEnum.LOCAL);
         userRepository.save(user);
 
-//        userStatusService.setUserOnline(user.getUserID());
+    //        userStatusService.setUserOnline(user.getUserID());
 
         return buildAuthResponse("Login successful!", jwtToken, mapToUserResponse(user));
     }
@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
         user.setAuthType(AuthTypeEnum.GITHUB);
         userRepository.save(user);
 
-        userStatusService.setUserOnline(user.getUserID());
+//        userStatusService.setUserOnline(user.getUserID());
 
         return buildAuthResponse("GitHub login successful!", jwtToken, mapToUserResponse(user));
     }

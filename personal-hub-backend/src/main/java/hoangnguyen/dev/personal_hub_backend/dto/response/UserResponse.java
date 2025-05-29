@@ -27,4 +27,7 @@ public class UserResponse {
 
     @JsonProperty("show_online_status")
     private boolean showOnlineStatus;
+
+    @JsonProperty("is_online")
+    private boolean isOnline;
 }

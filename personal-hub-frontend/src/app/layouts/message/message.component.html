@@ -34,7 +34,7 @@
           (click)="selectChat(user, 'active')">
           <div class="chat-avatar-container">
             <img [src]="user.profile_picture" alt="{{ user.username }}" class="chat-avatar">
-            <div class="online-indicator" [ngClass]="{'online': user.show_online_status}"></div>
+            <div class="online-indicator" [ngClass]="{'online': user.is_online && user.show_online_status}"></div>
             <div class="unread-indicator" *ngIf="user.hasUnreadMessages"></div>
           </div>
           <div class="chat-info">
@@ -49,7 +49,7 @@
         <div *ngFor="let user of pendingUsers" class="chat-item" [class.active]="user === currentChat" (click)="selectChat(user, 'pending')">
           <div class="chat-avatar-container">
             <img [src]="user.profile_picture" alt="{{ user.username }}" class="chat-avatar">
-            <div class="online-indicator" [ngClass]="{'online': user.show_online_status}"></div>
+            <div class="online-indicator" [ngClass]="{'online': user.is_online && user.show_online_status}"></div>
           </div>
           <div class="chat-info">
             <div class="chat-name">{{ user.username }}</div>
@@ -79,11 +79,13 @@
       <div class="current-chat-info">
         <div class="current-avatar-container">
           <img [src]="currentChat.profile_picture" [alt]="currentChat.username" class="current-avatar">
-          <div class="online-status" [class.online]="currentChat.show_online_status"></div>
+          <div class="online-status" [ngClass]="{'online': currentChat.is_online && currentChat.show_online_status}"></div>
         </div>
         <div class="current-chat-details">
           <h4>{{ currentChat.username }}</h4>
-          <span class="status">{{ currentChat.show_online_status ? 'online' : 'offline' }}</span>
+          <span class="status" [ngClass]="(currentChat.is_online && currentChat.show_online_status) ? 'online' : 'offline'">
+            {{ (currentChat.is_online && currentChat.show_online_status) ? 'online' : 'offline' }}
+          </span>
         </div>
       </div>
       <div class="chat-actions">

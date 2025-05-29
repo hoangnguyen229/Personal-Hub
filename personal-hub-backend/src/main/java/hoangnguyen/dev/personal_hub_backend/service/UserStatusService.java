@@ -9,4 +9,6 @@ public interface UserStatusService {
     void setUserOffline(Long userId);
     boolean isUserOnline(Long userId);
     List<UserResponse> getOnlineUsers(Long currentUserId);
+    List<UserResponse> getUsersStatus(List<Long> userIds);
+
 }

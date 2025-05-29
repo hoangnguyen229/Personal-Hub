@@ -150,6 +150,10 @@
   background: #28a745;
 }
 
+.online-indicator.offline {
+  background: #d13737;
+}
+
 .unread-indicator {
   position: absolute;
   top: -2px;
@@ -237,8 +241,25 @@
 }
 
 .status {
-  color: #28a745;
   font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px; /* Bo góc nhẹ để giống indicator */
+  transition: color 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+}
+
+/* Trạng thái online */
+.status.online {
+  color: #28a745; /* Màu xanh giống online-indicator */
+  background-color: rgba(40, 167, 69, 0.1); /* Nền nhạt để nổi bật */
+}
+
+/* Trạng thái offline */
+.status.offline {
+  color: #ccc; /* Màu xám giống online-indicator */
+  background-color: rgba(204, 204, 204, 0.1); /* Nền nhạt */
 }
 
 .chat-actions {

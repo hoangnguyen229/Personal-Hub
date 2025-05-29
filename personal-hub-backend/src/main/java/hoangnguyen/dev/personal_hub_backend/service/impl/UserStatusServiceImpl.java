@@ -30,12 +30,19 @@ public class UserStatusServiceImpl implements UserStatusService {
     @Override
     public void setUserOnline(Long userId) {
         redisTemplate.opsForValue().set(USER_STATUS_PREFIX + userId, "online");
-        redisTemplate.convertAndSend(USER_STATUS_CHANNEL, userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCodeEnum.USER_NOT_FOUND));
+        UserResponse userResponse = mapToUserResponse(user);
+        redisTemplate.convertAndSend(USER_STATUS_CHANNEL, userResponse);
     }
 
     @Override
     public void setUserOffline(Long userId) {
         redisTemplate.delete(USER_STATUS_PREFIX + userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCodeEnum.USER_NOT_FOUND));
+        UserResponse userResponse = mapToUserResponse(user);
+        redisTemplate.convertAndSend(USER_STATUS_CHANNEL, userResponse);
     }
 
     @Override
@@ -84,6 +91,21 @@ public class UserStatusServiceImpl implements UserStatusService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserResponse> getUsersStatus(List<Long> userIds) {
+        return userIds.stream()
+                .map(userId -> {
+                    User user = userRepository.findById(userId)
+                            .orElse(null);
+                    if (user == null) {
+                        return null;
+                    }
+                    return mapToUserResponse(user);
+                })
+                .filter(userResponse -> userResponse != null)
+                .collect(Collectors.toList());
+    }
+
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .userID(user.getUserID())
@@ -93,6 +115,7 @@ public class UserStatusServiceImpl implements UserStatusService {
                 .profilePic(user.getProfilePic())
                 .authType(user.getAuthType().getValue())
                 .showOnlineStatus(user.getShowOnlineStatus())
+                .isOnline(isUserOnline(user.getUserID()))
                 .build();
     }
 }

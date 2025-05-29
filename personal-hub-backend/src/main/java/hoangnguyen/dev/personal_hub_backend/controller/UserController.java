@@ -66,4 +66,10 @@ public class UserController {
         UserResponse userResponse = userService.updateOnlineStatus(userDetail.getId(), showOnlineStatus);
         return ResponseEntity.ok(userResponse);
     }
+
+    @PostMapping("/status")
+    public ResponseEntity<List<UserResponse>> getUsersStatus(@RequestBody List<Long> userIds) {
+        List<UserResponse> userResponses = userStatusService.getUsersStatus(userIds);
+        return ResponseEntity.ok(userResponses);
+    }
 }
