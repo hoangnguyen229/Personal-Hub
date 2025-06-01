@@ -79,6 +79,7 @@ public class AuthServiceImpl implements AuthService {
 
         String jwtToken = generateAndSaveToken(user);
         user.setAuthType(AuthTypeEnum.LOCAL);
+        user.setShowOnlineStatus(true);
         userRepository.save(user);
 
     //        userStatusService.setUserOnline(user.getUserID());
@@ -330,7 +331,7 @@ public class AuthServiceImpl implements AuthService {
         User oauthUser = User.builder()
                 .email(email)
                 .username(username)
-                // OAuth users don't need passwords
+                .showOnlineStatus(true)
                 .password(null)
                 .role(role)
                 .authType(authType)

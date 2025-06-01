@@ -51,4 +51,12 @@ export class UserService {
       { headers: this.authService.getAuthHeaders() }
     );
   }
+
+  getUsersStatus(userIds: number[]): Observable<User[]> {
+    return this.http.post<User[]>(
+      `${this.apiUrl}/status`, 
+      userIds, 
+      { headers: this.authService.getAuthHeaders() }
+    );
+  }
 }
