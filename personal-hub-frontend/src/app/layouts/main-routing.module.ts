@@ -8,6 +8,7 @@ import { AuthGuard } from "../core/guards/auth.guard";
 import { UpdateProfileComponent } from "./update-profile/update-profile.component";
 import { NotificationComponent } from "./notification/notification.component";
 import { UserProfileComponent } from "./user-profile/user-profile.component";
+import { MessageComponent } from "./message/message.component";
 
 const routes: Routes = [
     {
@@ -22,6 +23,7 @@ const routes: Routes = [
             { path: 'profile/edit', component: UpdateProfileComponent, canActivate: [AuthGuard]},
             { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuard]},
             { path: 'profile/:email', component: UserProfileComponent, canActivate: [AuthGuard]},
+            { path: 'messages', component: MessageComponent, canActivate: [AuthGuard]},
         ]
     }
 ];

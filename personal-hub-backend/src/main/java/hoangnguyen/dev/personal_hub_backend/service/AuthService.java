@@ -70,4 +70,6 @@ public interface AuthService {
      * @return authentication response with status
      */
     AuthResponse resetPassword(String token, String newPassword);
+
+    AuthResponse logout();
 }

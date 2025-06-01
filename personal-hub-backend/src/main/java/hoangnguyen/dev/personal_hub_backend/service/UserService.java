@@ -33,4 +33,12 @@ public interface UserService {
      * @return the updated user response DTO
      */
     UserResponse updateUser(Long userId, UserRequest userRequest);
+
+    /**
+     * Update user's online status
+     * @param userId the ID of the user to update
+     * @param showOnlineStatus true to show online status, false to hide
+     * @return the updated user response DTO
+     */
+    UserResponse updateOnlineStatus(Long userId, boolean showOnlineStatus);
 }

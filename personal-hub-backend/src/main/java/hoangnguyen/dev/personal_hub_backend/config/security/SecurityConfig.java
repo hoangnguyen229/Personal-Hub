@@ -38,6 +38,7 @@ public class SecurityConfig {
             "/api/notifications/**",
             "/api/follows/**",
             "/api/post-document/**",
+            "/api/messages/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",

@@ -115,7 +115,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.tempImages.push(imageUrl);
 
         // Chèn ảnh vào editor
-        const imageHtml = `<img src="${imageUrl}" alt="Uploaded Image" class="e-rte-image e-imginline">`;
+        const imageHtml = `<img src="${imageUrl}" alt="Uploaded Image" class="e-rte-image e-imginline" style="width: -webkit-fill-available;">`;
         this.rteInstance.executeCommand('insertHTML', imageHtml);
 
         // Cập nhật nội dung form

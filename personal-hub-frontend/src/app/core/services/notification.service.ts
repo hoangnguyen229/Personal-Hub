@@ -32,11 +32,6 @@ export class NotificationService {
     );
   }
 
-
-  /**
-   * Đánh dấu thông báo đã đọc
-   * @param notificationId ID của thông báo cần đánh dấu
-   */
   markAsRead(notificationId: number): Observable<Notification> {
     return this.http.put<Notification>(
       `${this.apiUrl}/${notificationId}`,
@@ -45,10 +40,6 @@ export class NotificationService {
     );
   }
 
-  /**
-   * Cập nhật danh sách thông báo trong BehaviorSubject
-   * @param notifications Danh sách thông báo mới
-   */
   updateNotifications(notifications: any): void {
     this.notificationsSubject.next(notifications);
   }
@@ -56,13 +47,11 @@ export class NotificationService {
   
   addNewNotification(notification: Notification): void {
     if (!notification || !notification.content || notification.content.trim() === '') {
-        console.warn('Bỏ qua thông báo rỗng hoặc không hợp lệ:', notification);
         return;
     }
     
     const currentNotifications = this.notificationsSubject.getValue();
     
-    // Kiểm tra xem thông báo đã tồn tại chưa để tránh trùng lặp
     const existingIndex = currentNotifications.findIndex(
       n => n.notification_id === notification.notification_id
     );
@@ -77,11 +66,6 @@ export class NotificationService {
     }
   }
 
-
-  /**
-   * Cập nhật trạng thái đã đọc cho một thông báo cụ thể trong danh sách
-   * @param notificationId ID của thông báo cần cập nhật
-   */
   updateNotificationReadStatus(notificationId: number): void {
     const currentNotifications = this.notificationsSubject.getValue();
     const updatedNotifications = currentNotifications.map(notification => {
@@ -93,10 +77,6 @@ export class NotificationService {
     this.notificationsSubject.next(updatedNotifications);
   }
 
-  /**
-   * Xóa thông báo khỏi danh sách
-   * @param notificationId ID của thông báo cần xóa
-   */
   deleteNotification(notificationId: number): Observable<Notification> {
       return this.http.delete<Notification>(
         `${this.apiUrl}/${notificationId}`, 

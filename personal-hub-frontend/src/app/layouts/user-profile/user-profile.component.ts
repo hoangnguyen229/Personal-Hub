@@ -170,6 +170,14 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  navigateToMessage(): void {
+    if (this.user?.email) {
+      this.router.navigate(['/messages'], { queryParams: { email: this.user.email } });
+    } else {
+      console.error('Không tìm thấy email của người dùng để nhắn tin');
+    }
+  }
+
   navigateToProfile(): void {
     this.router.navigate(['/profile/edit']);
   }

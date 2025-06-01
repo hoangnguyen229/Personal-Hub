@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import hoangnguyen.dev.personal_hub_backend.config.security.WebSocketAuthInterceptor;
+import hoangnguyen.dev.personal_hub_backend.entity.CustomUserDetail;
+import hoangnguyen.dev.personal_hub_backend.service.MessageService;
+import hoangnguyen.dev.personal_hub_backend.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -31,7 +34,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config){
-        config.enableSimpleBroker("/queue");
+        config.enableSimpleBroker("/topic", "/queue");
         config.setApplicationDestinationPrefixes("/app");
         config.setUserDestinationPrefix("/user");
     }
@@ -48,29 +51,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureClientInboundChannel(ChannelRegistration registry){
         registry.interceptors(webSocketAuthInterceptor);
     }
-
-//    @Override
-//    public void configureClientOutboundChannel(ChannelRegistration registry){
-//        registry.interceptors(new ChannelInterceptor() {
-//            @Override
-//            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-//                System.out.println("Outbound message: " + message);
-//                System.out.println("Outbound payload: " + message.getPayload());
-//                return message;
-//            }
-//        });
-//    }
-
-//    @Override
-//    public boolean configureMessageConverters(List<MessageConverter> converters) {
-//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        objectMapper.registerModule(new JavaTimeModule());
-//        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-//        converter.setObjectMapper(objectMapper);
-//        converters.add(converter);
-//        return false;
-//    }
 }

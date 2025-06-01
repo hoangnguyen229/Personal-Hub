@@ -1,0 +1,44 @@
+# Loại bỏ các file/thư mục liên quan đến Git
+.git
+.gitignore
+
+# Loại bỏ các file log và file tạm
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Loại bỏ thư mục build và các file build tạm
+target/
+build/
+out/
+
+# Loại bỏ các file cấu hình IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Loại bỏ các file Maven/Gradle không cần thiết
+.mvn/
+.gradle/
+dependency-reduced-pom.xml
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+
+# Loại bỏ các file/thư mục phát triển cục bộ
+*.md
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Loại bỏ các file cấu hình hoặc bí mật không cần đưa vào image
+*.key
+*.pem
+*.cert
+application-local.yml
+application-dev.yml
+application-prod.yml

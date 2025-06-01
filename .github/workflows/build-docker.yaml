@@ -1,0 +1,36 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository 
+      uses: actions/checkout@v4
+    
+    - name: Log in to Docker Hub
+      run: docker login -u hoangnguyen2003 -p ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: Build Backend Docker Image
+      run: |
+        docker build -t hoangnguyen2003/personal-hub-backend:latest ./personal-hub-backend
+
+    - name: Push Backend Docker Image
+      run: |
+        docker push hoangnguyen2003/personal-hub-backend:latest
+
+    - name: Build Frontend Docker Image
+      run: |
+        docker build -t hoangnguyen2003/personal-hub-frontend:latest ./personal-hub-frontend
+
+    - name: Push Frontend Docker Image
+      run: |
+        docker push hoangnguyen2003/personal-hub-frontend:latest

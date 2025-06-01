@@ -1,0 +1,145 @@
+services:
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_volume_data:/data
+    networks:
+      - backend
+
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redis_insight
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    volumes:
+      - redis_insight_volume_data:/db
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_volume_data:/var/lib/rabbitmq
+    networks:
+      - backend
+
+  elasticsearch:
+    build:
+      context: ./personal-hub-backend/elasticsearch-analysis-vietnamese
+      args:
+        ES_VERSION: 8.7.0
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        hard: -1
+        soft: -1
+    environment:
+      - ES_JAVA_OPTS=-Xmx2g -Xms2g
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+    networks:
+      - backend
+
+  oracle-db:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracle-db
+    ports:
+      - "1522:1521"
+    environment:
+      - ORACLE_PWD=${DATABASE_PASSWORD}
+      - ORACLE_CHARACTERSET=AL32UTF8
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    restart: unless-stopped
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: ./personal-hub-backend
+      dockerfile: Dockerfile
+    container_name: ph-backend
+    restart: unless-stopped
+    ports:
+      - "8094:8094"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - FRONT_END_CALLBACK_URL=${FRONT_END_CALLBACK_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - JWT_REFRESH_EXPIRATION=${JWT_REFRESH_EXPIRATION}
+      - MAIL_HOST=sandbox.smtp.mailtrap.io
+      - MAIL_PORT=2525
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_PORT=${RABBITMQ_PORT}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - NOTIFICATION_QUEUE=${NOTIFICATION_QUEUE}
+      - NOTIFICATION_ROUTING_KEY=${NOTIFICATION_ROUTING_KEY}
+      - MESSAGE_QUEUE=${MESSAGE_QUEUE}
+      - MESSAGE_ROUTING_KEY=${MESSAGE_ROUTING_KEY}
+      - SYSTEM_EXCHANGE=${SYSTEM_EXCHANGE}
+    depends_on:
+      - redis
+      - rabbitmq
+      - elasticsearch
+    networks:
+      - backend
+
+  frontend:
+    build:
+      context: ./personal-hub-frontend
+      dockerfile: Dockerfile
+    container_name: ph-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    networks:
+      - backend
+    depends_on:
+      - backend
+
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:
+  rabbitmq_volume_data:
+  oracle-data:
+
+networks:
+  backend:
+    driver: bridge

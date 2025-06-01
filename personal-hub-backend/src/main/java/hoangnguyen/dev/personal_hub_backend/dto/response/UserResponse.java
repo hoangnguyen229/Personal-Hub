@@ -24,4 +24,10 @@ public class UserResponse {
 
     @JsonProperty("auth_type")
     private String authType;
+
+    @JsonProperty("show_online_status")
+    private boolean showOnlineStatus;
+
+    @JsonProperty("is_online")
+    private boolean isOnline;
 }

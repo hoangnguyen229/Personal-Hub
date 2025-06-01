@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WebSocketService } from '../../core/services/websocket.service';
 import { AuthService } from '../../core/services/auth.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ToastrService } from 'ngx-toastr';
@@ -20,7 +19,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private webSocketService: WebSocketService,
     private authService: AuthService,
     private notificationService: NotificationService,
     private toastrService: ToastrService,
@@ -30,7 +28,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const userSub = this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
-      this.webSocketService.connect();
         
       this.loadNotifications();
         
@@ -47,7 +44,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    this.webSocketService.disconnect();
   }
 
   loadNotifications(): void {

@@ -76,11 +76,11 @@
 }
 
 /* Các style hiện tại giữ nguyên, chỉ thêm style cho nút Follow */
-.btn-follow {
+.btn-follow, .btn-message {
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
-  background-color: #292929; /* Màu xanh cho nút Follow */
+  background-color: #292929;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -88,13 +88,18 @@
   transition: background-color 0.2s ease;
 }
 
-.btn-follow:hover {
-  background-color: #6c757d; /* Màu xanh đậm hơn khi hover */
+.btn-follow:hover, .btn-message:hover {
+  background-color: #6c757d;
 }
 
 .btn-follow:disabled {
-  background-color: #6c757d; /* Màu xám khi disabled */
+  background-color: #6c757d;
   cursor: not-allowed;
+}
+
+.btn-message {
+  background-color: #007bff;
+  margin-left: 5px;
 }
 
 .bio-section {

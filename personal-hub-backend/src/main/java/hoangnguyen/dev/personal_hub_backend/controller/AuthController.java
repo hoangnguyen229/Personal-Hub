@@ -139,4 +139,10 @@ public class AuthController {
         AuthResponse authResponse = authService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.ok(authResponse);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<AuthResponse> logout(){
+        AuthResponse authResponse = authService.logout();
+        return ResponseEntity.ok(authResponse);
+    }
 }

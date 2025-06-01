@@ -14,15 +14,14 @@ import hoangnguyen.dev.personal_hub_backend.enums.RoleTypeEnum;
 import hoangnguyen.dev.personal_hub_backend.enums.TokenPurposeEnum;
 import hoangnguyen.dev.personal_hub_backend.exception.ApiException;
 import hoangnguyen.dev.personal_hub_backend.repository.UserRepository;
-import hoangnguyen.dev.personal_hub_backend.service.AuthService;
-import hoangnguyen.dev.personal_hub_backend.service.EmailService;
-import hoangnguyen.dev.personal_hub_backend.service.JwtService;
-import hoangnguyen.dev.personal_hub_backend.service.TokenService;
+import hoangnguyen.dev.personal_hub_backend.service.*;
 import hoangnguyen.dev.personal_hub_backend.validator.RegisterValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
     private final TokenService tokenService;
     private final SecureRandom secureRandom = new SecureRandom();
     private final EmailService emailService;
+    private final UserStatusService userStatusService;
 
     /**
      * Registers a new user with email, username and password
@@ -79,7 +79,10 @@ public class AuthServiceImpl implements AuthService {
 
         String jwtToken = generateAndSaveToken(user);
         user.setAuthType(AuthTypeEnum.LOCAL);
+        user.setShowOnlineStatus(true);
         userRepository.save(user);
+
+    //        userStatusService.setUserOnline(user.getUserID());
 
         return buildAuthResponse("Login successful!", jwtToken, mapToUserResponse(user));
     }
@@ -103,6 +106,9 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = token != null ? token : generateAndSaveToken(user);
         user.setAuthType(AuthTypeEnum.GOOGLE);
         userRepository.save(user);
+
+//        userStatusService.setUserOnline(user.getUserID());
+
         return buildAuthResponse("Google login successful!", jwtToken, mapToUserResponse(user));
     }
 
@@ -125,6 +131,9 @@ public class AuthServiceImpl implements AuthService {
         String jwtToken = token != null ? token : generateAndSaveToken(user);
         user.setAuthType(AuthTypeEnum.GITHUB);
         userRepository.save(user);
+
+//        userStatusService.setUserOnline(user.getUserID());
+
         return buildAuthResponse("GitHub login successful!", jwtToken, mapToUserResponse(user));
     }
 
@@ -208,6 +217,22 @@ public class AuthServiceImpl implements AuthService {
         return buildAuthResponse("Password reset successful!", null, null);
     }
 
+    @Override
+    public AuthResponse logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || !(authentication.getPrincipal() instanceof CustomUserDetail customUserDetail)){
+            throw new ApiException(ErrorCodeEnum.UNAUTHORIZED_OPERATION);
+        }
+
+        User user = userRepository.findById(customUserDetail.getId()).orElseThrow(
+                () -> new ApiException(ErrorCodeEnum.USER_NOT_FOUND)
+        );
+        tokenService.revokeAllUserTokens(user);
+        userStatusService.setUserOffline(user.getUserID());
+        SecurityContextHolder.clearContext();
+        return buildAuthResponse("Logout successful!", null, null);
+    }
+
     /**
      * Checks if an email is already registered
      * 
@@ -237,6 +262,7 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(role)
                 .authType(AuthTypeEnum.LOCAL)
+                .showOnlineStatus(true)
                 .build();
     }
 
@@ -305,7 +331,7 @@ public class AuthServiceImpl implements AuthService {
         User oauthUser = User.builder()
                 .email(email)
                 .username(username)
-                // OAuth users don't need passwords
+                .showOnlineStatus(true)
                 .password(null)
                 .role(role)
                 .authType(authType)

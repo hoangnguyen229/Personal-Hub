@@ -40,6 +40,9 @@ public class User {
     @Column(name = "auth_type", nullable = false)
     private AuthTypeEnum authType = AuthTypeEnum.LOCAL;
 
+    @Column(name = "show_online_status", nullable = false)
+    private Boolean showOnlineStatus;
+
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp createdAt;
@@ -91,4 +94,11 @@ public class User {
 
     @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Follow> followers = new HashSet<>();
+
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Message> sentMessages = new HashSet<>();
+
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Message> receivedMessages = new HashSet<>();
+
 }

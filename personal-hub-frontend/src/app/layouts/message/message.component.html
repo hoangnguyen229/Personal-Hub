@@ -1,0 +1,154 @@
+<div class="chat-container">
+  <!-- Sidebar danh sách người dùng -->
+  <div class="chat-sidebar">
+    <div class="sidebar-header">
+      <h3 class="messages-title">Messages</h3>
+    </div>
+
+    <div class="search-container">
+      <input type="text" placeholder="Search for chats" class="search-input">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+    </div>
+
+    <div class="chat-tabs">
+      <button class="chat-tab" [class.active]="activeTab === 'active'" (click)="switchTab('active')">
+        Active Chats 
+        <span class="chat-count">{{ users.length }}</span>
+      </button>
+      <button class="chat-tab" [class.active]="activeTab === 'pending'" (click)="switchTab('pending')">
+        Pending 
+        <span class="chat-count pending-count">{{ pendingUsers.length }}</span>
+      </button>
+    </div>
+
+    <div class="chat-list">
+      <!-- Hiển thị danh sách Active Chats -->
+      <div *ngIf="activeTab === 'active'">
+        <div 
+          *ngFor="let user of users" 
+          class="chat-item"
+          [class.active]="user === currentChat"
+          (click)="selectChat(user, 'active')">
+          <div class="chat-avatar-container">
+            <img [src]="user.profile_picture" alt="{{ user.username }}" class="chat-avatar">
+            <div class="online-indicator" [ngClass]="{'online': user.is_online && user.show_online_status}"></div>
+            <div class="unread-indicator" *ngIf="user.hasUnreadMessages"></div>
+          </div>
+          <div class="chat-info">
+            <div class="chat-name">{{ user.username }}</div>
+            <div class="chat-preview">{{ user.lastMessage ? user.lastMessage : 'Start a conversation' }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hiển thị danh sách Pending Conversations -->
+      <div *ngIf="activeTab === 'pending'">
+        <div *ngFor="let user of pendingUsers" class="chat-item" [class.active]="user === currentChat" (click)="selectChat(user, 'pending')">
+          <div class="chat-avatar-container">
+            <img [src]="user.profile_picture" alt="{{ user.username }}" class="chat-avatar">
+            <div class="online-indicator" [ngClass]="{'online': user.is_online && user.show_online_status}"></div>
+          </div>
+          <div class="chat-info">
+            <div class="chat-name">{{ user.username }}</div>
+            <div class="chat-preview">Pending conversation</div>
+          </div>
+          <div class="pending-actions">
+            <button class="action-btn" (click)="acceptPendingConversation(user.user_id)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </button>
+            <button class="action-btn" (click)="rejectPendingConversation(user.user_id)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc3545" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Khu vực chat chính -->
+  <div class="chat-main">
+    <div class="chat-header" *ngIf="currentChat">
+      <div class="current-chat-info">
+        <div class="current-avatar-container">
+          <img [src]="currentChat.profile_picture" [alt]="currentChat.username" class="current-avatar">
+          <div class="online-status" [ngClass]="{'online': currentChat.is_online && currentChat.show_online_status}"></div>
+        </div>
+        <div class="current-chat-details">
+          <h4>{{ currentChat.username }}</h4>
+          <span class="status" [ngClass]="(currentChat.is_online && currentChat.show_online_status) ? 'online' : 'offline'">
+            {{ (currentChat.is_online && currentChat.show_online_status) ? 'online' : 'offline' }}
+          </span>
+        </div>
+      </div>
+      <div class="chat-actions">
+        <button class="action-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </button>
+        <button class="action-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
+        </button>
+        <button class="action-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"/>
+            <circle cx="12" cy="5" r="1"/>
+            <circle cx="12" cy="19" r="1"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Khu vực tin nhắn -->
+    <div class="messages-container" #messagesContainer>
+      <div *ngFor="let message of messages" class="message" [class.own]="message.sender.user_id === authService.getCurrentUser()?.user_id">
+        <div class="message-content">
+          <div class="message-bubble" [class.own-bubble]="message.sender.user_id === authService.getCurrentUser()?.user_id">
+            <span>{{ message.content }}</span>
+          </div>
+          <div class="message-time">
+            {{ message.sent_at | date: 'shortTime' }}
+            <svg *ngIf="message.sender.user_id === authService.getCurrentUser()?.user_id" class="message-status" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input gửi tin nhắn -->
+    <div class="message-input-container" *ngIf="currentChat && activeTab === 'active'">
+      <div class="input-wrapper">
+        <button class="emoji-btn">😊</button>
+        <input 
+          type="text" 
+          placeholder="Type a message" 
+          class="message-input"
+          [(ngModel)]="newMessage"
+          (keyup.enter)="sendMessage()">
+        <button class="attach-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.41 16.4a2 2 0 0 1-2.83-2.83l8.49-8.4"/>
+          </svg>
+        </button>
+        <button class="send-btn" (click)="sendMessage()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
