@@ -1,3 +1,5 @@
+version: '3.9'
+
 services:
   redis:
     image: redis:6.0.7
@@ -10,16 +12,16 @@ services:
     networks:
       - backend
 
-  redis_insight:
-    image: redislabs/redisinsight:1.14.0
-    container_name: redis_insight
-    restart: unless-stopped
-    ports:
-      - "8001:8001"
-    volumes:
-      - redis_insight_volume_data:/db
-    networks:
-      - backend
+  # redis_insight:
+  #   image: redislabs/redisinsight:1.14.0
+  #   container_name: redis_insight
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8001:8001"
+  #   volumes:
+  #     - redis_insight_volume_data:/db
+  #   networks:
+  #     - backend
 
   rabbitmq:
     image: rabbitmq:management
@@ -36,31 +38,31 @@ services:
     networks:
       - backend
 
-  elasticsearch:
-    build:
-      context: ./personal-hub-backend/elasticsearch-analysis-vietnamese
-      args:
-        ES_VERSION: 8.7.0
-    container_name: elasticsearch
-    restart: unless-stopped
-    ports:
-      - "9200:9200"
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
-      memlock:
-        hard: -1
-        soft: -1
-    environment:
-      - ES_JAVA_OPTS=-Xmx2g -Xms2g
-      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - bootstrap.memory_lock=true
-      - discovery.type=single-node
-      - xpack.security.enabled=true
-    networks:
-      - backend
+  # elasticsearch:
+  #   build:
+  #     context: ./personal-hub-backend/elasticsearch-analysis-vietnamese
+  #     args:
+  #       ES_VERSION: 8.7.0
+  #   container_name: elasticsearch
+  #   restart: unless-stopped
+  #   ports:
+  #     - "9200:9200"
+  #   ulimits:
+  #     nofile:
+  #       soft: 65536
+  #       hard: 65536
+  #     memlock:
+  #       hard: -1
+  #       soft: -1
+  #   environment:
+  #     - ES_JAVA_OPTS=-Xmx1g -Xms1g
+  #     - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #     - bootstrap.memory_lock=true
+  #     - discovery.type=single-node
+  #     - xpack.security.enabled=true
+  #   networks:
+  #     - backend
 
   oracle-db:
     image: container-registry.oracle.com/database/free:latest
@@ -77,9 +79,10 @@ services:
       - backend
 
   backend:
-    build:
-      context: ./personal-hub-backend
-      dockerfile: Dockerfile
+    # build:
+    #   context: ./personal-hub-backend
+    #   dockerfile: Dockerfile
+    image: hoangnguyen2003/personal-hub-backend:latest
     container_name: ph-backend
     restart: unless-stopped
     ports:
@@ -117,14 +120,12 @@ services:
     depends_on:
       - redis
       - rabbitmq
-      - elasticsearch
+      # - elasticsearch
     networks:
       - backend
 
   frontend:
-    build:
-      context: ./personal-hub-frontend
-      dockerfile: Dockerfile
+    image: hoangnguyen2003/personal-hub-frontend:latest
     container_name: ph-frontend
     restart: unless-stopped
     ports:
