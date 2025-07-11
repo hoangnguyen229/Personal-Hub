@@ -33,7 +33,7 @@ public class PostController {
 
     /**
      * Create a new post with optional images
-     * 
+     *
      * @param title post title
      * @param content post content
      * @param categoryID category identifier
@@ -62,7 +62,7 @@ public class PostController {
 
     /**
      * Get all posts with pagination and sorting
-     * 
+     *
      * @param page page number (zero-based)
      * @param size page size
      * @param sortBy field to sort by
@@ -76,19 +76,19 @@ public class PostController {
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir
     ) {
-        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? 
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
         Page<PostResponse> postPage = postService.getAllPosts(pageable);
 
         PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
         return ResponseEntity.ok(response);
     }
-    
+
     /**
      * Get a specific post by its ID
-     * 
+     *
      * @param postId post identifier
      * @return post response with matching ID
      */
@@ -97,10 +97,10 @@ public class PostController {
         PostResponse postResponse = postService.getPostById(postId);
         return ResponseEntity.ok(postResponse);
     }
-    
+
     /**
      * Get a specific post by its slug
-     * 
+     *
      * @param slug post slug identifier
      * @return post response with matching slug
      */
@@ -115,10 +115,10 @@ public class PostController {
         PostResponse postResponse = postService.getPostsByTitle(title);
         return ResponseEntity.ok(postResponse);
     }
-    
+
     /**
      * Get posts filtered by category
-     * 
+     *
      * @param categorySlug category slug identifier
      * @param page page number (zero-based)
      * @param size page size
@@ -134,19 +134,19 @@ public class PostController {
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String sortDir
     ) {
-        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? 
+        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ?
                 Sort.Direction.ASC : Sort.Direction.DESC;
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
         Page<PostResponse> postPage = postService.getPostsByCategory(categorySlug, pageable);
 
         PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
         return ResponseEntity.ok(response);
     }
-    
+
     /**
      * Get posts filtered by tag
-     * 
+     *
      * @param tagName tag name to filter by
      * @param page page number (zero-based)
      * @param size page size
@@ -154,23 +154,23 @@ public class PostController {
      * @param sortDir sort direction (asc/desc)
      * @return paginated list of posts with the specified tag
      */
-    @GetMapping("/tag/{tagName}")
-    public ResponseEntity<PageResponse<PostResponse>> getPostsByTag(
-            @PathVariable String tagName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
-            @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String sortDir
-    ) {
-        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ? 
-                Sort.Direction.ASC : Sort.Direction.DESC;
-        
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-        Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
-
-        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/tag/{tagName}")
+//    public ResponseEntity<PageResponse<PostResponse>> getPostsByTag(
+//            @PathVariable String tagName,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "20") int size,
+//            @RequestParam(defaultValue = "createdAt") String sortBy,
+//            @RequestParam(defaultValue = "desc") String sortDir
+//    ) {
+//        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ?
+//                Sort.Direction.ASC : Sort.Direction.DESC;
+//
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+////        Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
+//
+//        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
+//        return ResponseEntity.ok(response);
+//    }
 
     /**
      * Get autocomplete suggestions for tags based on prefix
@@ -178,11 +178,11 @@ public class PostController {
      * @param prefix the prefix to search for tag suggestions
      * @return list of suggested tag names
      */
-    @GetMapping("/tag/autocomplete")
-    public ResponseEntity<Set<String>> autocompleteTags(@RequestParam String prefix) {
-        Set<String> suggestions = postService.autocompleteTags(prefix);
-        return ResponseEntity.ok(suggestions);
-    }
+//    @GetMapping("/tag/autocomplete")
+//    public ResponseEntity<Set<String>> autocompleteTags(@RequestParam String prefix) {
+//        Set<String> suggestions = postService.autocompleteTags(prefix);
+//        return ResponseEntity.ok(suggestions);
+//    }
 
     /**
      * Update an existing post
@@ -235,19 +235,19 @@ public class PostController {
         return ResponseEntity.ok(postResponses);
     }
 
-    @GetMapping("/suggest")
-    public ResponseEntity<List<String>> getTitleSuggestions(@RequestParam String prefix) {
-        List<String> suggestions = postService.autocompleteTitles(prefix);
-        return ResponseEntity.ok(suggestions);
-    }
+//    @GetMapping("/suggest")
+//    public ResponseEntity<List<String>> getTitleSuggestions(@RequestParam String prefix) {
+//        List<String> suggestions = postService.autocompleteTitles(prefix);
+//        return ResponseEntity.ok(suggestions);
+//    }
 
-    @GetMapping("/search")
-    public ResponseEntity<PageResponse<PostResponse>> searchPostByTitle(
-            @RequestParam String query,
-            Pageable pageable
-    ){
-        Page<PostResponse> postPage = postService.searchByTitle(query, pageable);
-        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<PageResponse<PostResponse>> searchPostByTitle(
+//            @RequestParam String query,
+//            Pageable pageable
+//    ){
+//        Page<PostResponse> postPage = postService.searchByTitle(query, pageable);
+//        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
+//        return ResponseEntity.ok(response);
+//    }
 }

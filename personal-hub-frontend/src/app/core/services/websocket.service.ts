@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Client } from '@stomp/stompjs';
-import * as SockJS from 'sockjs-client';
+// import * as SockJS from 'sockjs-client';
 import { AuthService } from './auth.service';
 import { Notification } from '../models/notification.model';
 import { Messages } from '../models/messages.model';
@@ -34,12 +34,13 @@ export class WebSocketService {
       console.error('No authentication token found');
       return;
     }
-
+    debugger;
     console.log("Starting WebSocket connection...");
-    const socket = new SockJS('http://localhost:8094/ws');
+    // const socket = new SockJS('http://localhost:8094/ws');
 
     this.stompClient = new Client({
-      webSocketFactory: () => socket,
+      // webSocketFactory: () => socket,
+      brokerURL: 'http://localhost:8094/ws',
       connectHeaders: {
         Authorization: `Bearer ${token}`
       },

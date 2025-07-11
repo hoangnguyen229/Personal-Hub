@@ -63,7 +63,7 @@ public interface PostService {
      * @param pageable pagination information
      * @return page of post responses
      */
-    Page<PostResponse> getPostsByTag(String tagName, Pageable pageable);
+//    Page<PostResponse> getPostsByTag(String tagName, Pageable pageable);
 
     /**
      * Retrieves posts filtered by title with pagination
@@ -79,7 +79,7 @@ public interface PostService {
 
     List<PostResponse> getPostByUserId(Long userId);
 
-    Set<String> autocompleteTags(String prefix);
-    List<String> autocompleteTitles(String prefix);
-    Page<PostResponse> searchByTitle(String query, Pageable pageable);
+//    Set<String> autocompleteTags(String prefix);
+//    List<String> autocompleteTitles(String prefix);
+//    Page<PostResponse> searchByTitle(String query, Pageable pageable);
 }
