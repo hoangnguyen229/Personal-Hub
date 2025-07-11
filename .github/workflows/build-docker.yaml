@@ -1,16 +1,13 @@
 name: Build and Push Docker Images
 
 on:
-  pull_request:
+  push:
     branches:
       - "main"
-    types:
-      - closed
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
 
     steps:
     - name: Checkout the repository 
