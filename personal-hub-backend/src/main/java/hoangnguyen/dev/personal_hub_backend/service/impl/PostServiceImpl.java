@@ -3,9 +3,9 @@ package hoangnguyen.dev.personal_hub_backend.service.impl;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
-import hoangnguyen.dev.personal_hub_backend.document.PostDocument;
-import hoangnguyen.dev.personal_hub_backend.document.TagDocument;
-import hoangnguyen.dev.personal_hub_backend.document.UserDocument;
+//import hoangnguyen.dev.personal_hub_backend.document.PostDocument;
+//import hoangnguyen.dev.personal_hub_backend.document.TagDocument;
+//import hoangnguyen.dev.personal_hub_backend.document.UserDocument;
 import hoangnguyen.dev.personal_hub_backend.dto.request.PostRequest;
 import hoangnguyen.dev.personal_hub_backend.dto.response.*;
 import hoangnguyen.dev.personal_hub_backend.entity.*;
@@ -16,7 +16,7 @@ import hoangnguyen.dev.personal_hub_backend.helper.Indices;
 import hoangnguyen.dev.personal_hub_backend.repository.*;
 import hoangnguyen.dev.personal_hub_backend.service.ImageService;
 import hoangnguyen.dev.personal_hub_backend.service.NotificationService;
-import hoangnguyen.dev.personal_hub_backend.service.PostDocumentService;
+//import hoangnguyen.dev.personal_hub_backend.service.PostDocumentService;
 import hoangnguyen.dev.personal_hub_backend.service.PostService;
 import hoangnguyen.dev.personal_hub_backend.uitls.SlugUtils;
 import lombok.RequiredArgsConstructor;
@@ -45,9 +45,9 @@ public class PostServiceImpl implements PostService {
     private final ImageRepository imageRepository;
     private final FollowRepository followRepository;
     private final NotificationService notificationService;
-    private final PostDocumentRepository postDocumentRepository;
+//    private final PostDocumentRepository postDocumentRepository;
     private final ElasticsearchClient elasticsearchClient;
-    private final PostDocumentService postDocumentService;
+//    private final PostDocumentService postDocumentService;
 
 
     private static final int MAX_TAG_LENGTH = 50;
@@ -85,42 +85,42 @@ public class PostServiceImpl implements PostService {
 
 
 
-    @Override
-    public Page<PostResponse> getPostsByTag(String tagName, Pageable pageable) {
-        try {
-            SearchRequest searchRequest = SearchRequest.of(sr -> sr
-                    .index(Indices.POST_INDEX)
-                    .query(q -> q
-                            .bool(b -> b
-                                    .must(m -> m
-                                            .nested(n -> n
-                                                    .path("tags")
-                                                    .query(nq -> nq
-                                                            .match(ma -> ma
-                                                                    .field("tags.tagName")
-                                                                    .query(tagName)
-                                                                    .analyzer("vi_analyzer")))))
-                                    .mustNot(mn -> mn
-                                            .exists(e -> e
-                                                    .field("deletedAt")))))
-                    .from((int) pageable.getOffset())
-                    .size(pageable.getPageSize())
-            );
-
-            System.out.println("Search request: " + searchRequest);
-
-            SearchResponse<PostDocument> searchResponse = elasticsearchClient.search(searchRequest, PostDocument.class);
-            Set<Long> postIds = searchResponse.hits().hits().stream()
-                    .map(hit -> hit.source().getPostID())
-                    .collect(Collectors.toSet());
-
-            Page<Post> posts = postRepository.findByPostIDIn(postIds, pageable);
-
-            return posts.map(this::mapToPostResponse);
-        } catch (Exception e) {
-            throw new ApiException(ErrorCodeEnum.SEARCH_FAILED);
-        }
-    }
+//    @Override
+//    public Page<PostResponse> getPostsByTag(String tagName, Pageable pageable) {
+//        try {
+//            SearchRequest searchRequest = SearchRequest.of(sr -> sr
+//                    .index(Indices.POST_INDEX)
+//                    .query(q -> q
+//                            .bool(b -> b
+//                                    .must(m -> m
+//                                            .nested(n -> n
+//                                                    .path("tags")
+//                                                    .query(nq -> nq
+//                                                            .match(ma -> ma
+//                                                                    .field("tags.tagName")
+//                                                                    .query(tagName)
+//                                                                    .analyzer("vi_analyzer")))))
+//                                    .mustNot(mn -> mn
+//                                            .exists(e -> e
+//                                                    .field("deletedAt")))))
+//                    .from((int) pageable.getOffset())
+//                    .size(pageable.getPageSize())
+//            );
+//
+//            System.out.println("Search request: " + searchRequest);
+//
+//            SearchResponse<PostDocument> searchResponse = elasticsearchClient.search(searchRequest, PostDocument.class);
+//            Set<Long> postIds = searchResponse.hits().hits().stream()
+//                    .map(hit -> hit.source().getPostID())
+//                    .collect(Collectors.toSet());
+//
+//            Page<Post> posts = postRepository.findByPostIDIn(postIds, pageable);
+//
+//            return posts.map(this::mapToPostResponse);
+//        } catch (Exception e) {
+//            throw new ApiException(ErrorCodeEnum.SEARCH_FAILED);
+//        }
+//    }
 
     @Override
     public PostResponse getPostsByTitle(String title) {
@@ -164,7 +164,7 @@ public class PostServiceImpl implements PostService {
         List<Image> images = processPostImages(postRequest.getContent(), savedPost);
         savedPost.setImages(images);
 
-        postDocumentService.syncPostToElasticsearch(savedPost);
+//        postDocumentService.syncPostToElasticsearch(savedPost);
 
         List<Follow> follows = followRepository.findAllByFollowingUserIDAndDeletedAtIsNull(userID);
         for(Follow follow : follows) {
@@ -246,81 +246,81 @@ public class PostServiceImpl implements PostService {
                 .toList();
     }
 
-    @Override
-    public Set<String> autocompleteTags(String prefix) {
-        try {
-            if(prefix == null || prefix.isEmpty()){
-                return Collections.emptySet();
-            }
+//    @Override
+//    public Set<String> autocompleteTags(String prefix) {
+//        try {
+//            if(prefix == null || prefix.isEmpty()){
+//                return Collections.emptySet();
+//            }
+//
+//            SearchRequest searchRequest = SearchRequest.of(sr -> sr
+//                    .index("posts")
+//                    .query(q -> q
+//                            .nested(n -> n
+//                                    .path("tags")
+//                                    .query(nq -> nq
+//                                            .prefix(p -> p
+//                                                    .field("tags.tagName")
+//                                                    .value(prefix))))) // query: lọc ra các documents có ít nhất một tag thỏa prefix
+//                    .aggregations("tag_names", a -> a
+//                            .nested(n -> n
+//                                    .path("tags"))
+//                            .aggregations("filtered_tags", fa -> fa
+//                                    .filter(f -> f
+//                                            .prefix(p -> p
+//                                                    .field("tags.tagName")
+//                                                    .value(prefix))) // aggregations: chỉ thống kê các tag thỏa prefix
+//                                    .aggregations("tag_terms", at -> at
+//                                            .terms(t -> t
+//                                                    .field("tags.tagName.keyword")
+//                                                    .size(10)))))
+//            );
+//
+//            System.out.println("Search request: " + searchRequest);
+//
+//
+//            SearchResponse<Void> response = elasticsearchClient.search(searchRequest, Void.class);
+//            System.out.println(response);
+//
+//            if (response.aggregations() == null || !response.aggregations().containsKey("tag_names")) {
+//                return Collections.emptySet();
+//            }
+//
+//            Set<String> suggestions = response.aggregations()
+//                    .get("tag_names")
+//                    .nested()
+//                    .aggregations()
+//                    .get("filtered_tags")
+//                    .filter()
+//                    .aggregations()
+//                    .get("tag_terms")
+//                    .sterms()
+//                    .buckets()
+//                    .array()
+//                    .stream()
+//                    .map(bucket -> bucket.key().stringValue())
+//                    .collect(Collectors.toSet());
+//
+//            return suggestions;
+//        } catch (Exception e) {
+//            throw new ApiException(ErrorCodeEnum.SEARCH_FAILED);
+//        }
+//    }
 
-            SearchRequest searchRequest = SearchRequest.of(sr -> sr
-                    .index("posts")
-                    .query(q -> q
-                            .nested(n -> n
-                                    .path("tags")
-                                    .query(nq -> nq
-                                            .prefix(p -> p
-                                                    .field("tags.tagName")
-                                                    .value(prefix))))) // query: lọc ra các documents có ít nhất một tag thỏa prefix
-                    .aggregations("tag_names", a -> a
-                            .nested(n -> n
-                                    .path("tags"))
-                            .aggregations("filtered_tags", fa -> fa
-                                    .filter(f -> f
-                                            .prefix(p -> p
-                                                    .field("tags.tagName")
-                                                    .value(prefix))) // aggregations: chỉ thống kê các tag thỏa prefix
-                                    .aggregations("tag_terms", at -> at
-                                            .terms(t -> t
-                                                    .field("tags.tagName.keyword")
-                                                    .size(10)))))
-            );
+//    @Override
+//    public List<String> autocompleteTitles(String prefix) {
+//        return postDocumentService.getTitleSuggestions(prefix);
+//    }
 
-            System.out.println("Search request: " + searchRequest);
-
-
-            SearchResponse<Void> response = elasticsearchClient.search(searchRequest, Void.class);
-            System.out.println(response);
-
-            if (response.aggregations() == null || !response.aggregations().containsKey("tag_names")) {
-                return Collections.emptySet();
-            }
-
-            Set<String> suggestions = response.aggregations()
-                    .get("tag_names")
-                    .nested()
-                    .aggregations()
-                    .get("filtered_tags")
-                    .filter()
-                    .aggregations()
-                    .get("tag_terms")
-                    .sterms()
-                    .buckets()
-                    .array()
-                    .stream()
-                    .map(bucket -> bucket.key().stringValue())
-                    .collect(Collectors.toSet());
-
-            return suggestions;
-        } catch (Exception e) {
-            throw new ApiException(ErrorCodeEnum.SEARCH_FAILED);
-        }
-    }
-
-    @Override
-    public List<String> autocompleteTitles(String prefix) {
-        return postDocumentService.getTitleSuggestions(prefix);
-    }
-
-    @Override
-    public Page<PostResponse> searchByTitle(String query, Pageable pageable) {
-        return postDocumentService.searchByTitle(query, pageable)
-                .map(postDocument -> {
-                    Post post = postRepository.findById(postDocument.getPostID())
-                            .orElseThrow(() -> new ApiException(ErrorCodeEnum.POST_NOT_FOUND));
-                    return mapToPostResponse(post);
-                });
-    }
+//    @Override
+//    public Page<PostResponse> searchByTitle(String query, Pageable pageable) {
+//        return postDocumentService.searchByTitle(query, pageable)
+//                .map(postDocument -> {
+//                    Post post = postRepository.findById(postDocument.getPostID())
+//                            .orElseThrow(() -> new ApiException(ErrorCodeEnum.POST_NOT_FOUND));
+//                    return mapToPostResponse(post);
+//                });
+//    }
 
 //    public void syncPostToElasticsearch(Post post){
 //        PostDocument postDocument = PostDocument.builder()
