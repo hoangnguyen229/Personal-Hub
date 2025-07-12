@@ -124,16 +124,16 @@ services:
     networks:
       - backend
 
-  frontend:
-    image: hoangnguyen2003/personal-hub-frontend:latest
-    container_name: ph-frontend
-    restart: unless-stopped
-    ports:
-      - "4200:80"
-    networks:
-      - backend
-    depends_on:
-      - backend
+  # frontend:
+  #   image: hoangnguyen2003/personal-hub-frontend:latest
+  #   container_name: ph-frontend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "4200:80"
+  #   networks:
+  #     - backend
+  #   depends_on:
+  #     - backend
 
   nginx:
     image: hoangnguyen2003/personal-hub-nginx:latest
@@ -142,7 +142,6 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - frontend
       - backend
     networks:
       - backend
