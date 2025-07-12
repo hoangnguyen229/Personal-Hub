@@ -42,7 +42,13 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:4200", "http://160.187.0.80:4200")
+                .setAllowedOrigins(
+                    "http://localhost:4200", 
+                    "http://160.187.0.80:4200",
+                    "http://hoangnguyen-dev.site",
+                    "http://www.hoangnguyen-dev.site"
+                )
+                
                 // .withSockJS()
                 // .setInterceptors(new HttpSessionHandshakeInterceptor());
                 .addInterceptors(new HttpSessionHandshakeInterceptor());
