@@ -40,7 +40,7 @@ export class WebSocketService {
 
     this.stompClient = new Client({
       // webSocketFactory: () => socket,
-      brokerURL: 'http://localhost:8094/ws',
+      brokerURL: 'http://160.187.0.80:8094/ws',
       connectHeaders: {
         Authorization: `Bearer ${token}`
       },
