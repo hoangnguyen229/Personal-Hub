@@ -53,7 +53,7 @@ jobs:
 
     - name: SSH and deploy
       run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
           docker login -u hoangnguyen2003 -p $DOCKER_HUB_TOKEN
           cd /home/${{ secrets.SSH_USER }}/personal-hub
           docker-compose pull
