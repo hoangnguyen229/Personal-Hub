@@ -3,7 +3,10 @@ FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-COPY src/main/resources/data.sql ./src/main/resources/data.sql
+
+# Once time in a Database when initial
+COPY data.sql ./src/main/resources/data.sql
+
 RUN mvn clean package -DskipTests
 
 # Giai đoạn 2: Chạy ứng dụng
