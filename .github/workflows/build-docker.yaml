@@ -30,15 +30,15 @@ jobs:
         push: true
         tags: hoangnguyen2003/personal-hub-backend:latest
 
-    - name: Build and Push Frontend Docker Image
-      uses: docker/build-push-action@v5
-      with:
-        context: ./personal-hub-frontend
-        file: ./personal-hub-frontend/Dockerfile
-        push: true
-        tags: hoangnguyen2003/personal-hub-frontend:latest
+    # - name: Build and Push Frontend Docker Image
+    #   uses: docker/build-push-action@v5
+    #   with:
+    #     context: ./personal-hub-frontend
+    #     file: ./personal-hub-frontend/Dockerfile
+    #     push: true
+    #     tags: hoangnguyen2003/personal-hub-frontend:latest
 
-    - name: Build and Push Nginx Docker Image
+    - name: Build and Push Nginx (Frontend) Docker Image
       uses: docker/build-push-action@v5
       with:
         context: ./nginx
