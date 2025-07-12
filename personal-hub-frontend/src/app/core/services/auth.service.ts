@@ -121,8 +121,8 @@ export class AuthService {
             expires: 1,
             path: '/',
             httpOnly: true,
-            secure: true,
-            sameSite: 'Strict' as 'Strict' 
+            secure: false,
+            sameSite: 'Lax' as 'Lax' 
         };
 
         const authTypeTokenCookie = `${authType}_access_token`;
