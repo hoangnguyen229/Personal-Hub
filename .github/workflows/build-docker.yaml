@@ -41,7 +41,7 @@ jobs:
     - name: Build and Push Nginx (Frontend) Docker Image
       uses: docker/build-push-action@v5
       with:
-        context: ./nginx
+        context: .
         file: ./nginx/Dockerfile
         push: true
         tags: hoangnguyen2003/personal-hub-nginx:latest
