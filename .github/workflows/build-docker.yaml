@@ -38,6 +38,14 @@ jobs:
         push: true
         tags: hoangnguyen2003/personal-hub-frontend:latest
 
+    - name: Build and Push Nginx Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./nginx
+        file: ./nginx/Dockerfile
+        push: true
+        tags: hoangnguyen2003/personal-hub-nginx:latest
+
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
@@ -56,6 +64,7 @@ jobs:
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
           docker login -u hoangnguyen2003 -p $DOCKER_HUB_TOKEN
           cd /home/${{ secrets.SSH_USER }}/personal-hub
+          git pull origin main
           docker-compose pull
           docker-compose up -d
         EOF
