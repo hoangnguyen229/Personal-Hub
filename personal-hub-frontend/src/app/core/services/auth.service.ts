@@ -38,7 +38,7 @@ export class AuthService {
     }
 
     initiateGoogleLogin(): void {
-        const googleOAuthUrl = 'http://localhost:8094/oauth2/authorization/google';
+        const googleOAuthUrl = `${API_CONFIG.baseUrl.replace('/api', '')}/oauth2/authorization/google`;
         window.location.href = googleOAuthUrl;
     }
 
@@ -49,7 +49,7 @@ export class AuthService {
     }
 
     initiateGithubLogin(): void {
-        const githubOAuthUrl = 'http://localhost:8094/oauth2/authorization/github';
+        const githubOAuthUrl = `${API_CONFIG.baseUrl.replace('/api', '')}/oauth2/authorization/github`;
         window.location.href = githubOAuthUrl;
     }
 
