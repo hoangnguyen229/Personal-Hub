@@ -5,7 +5,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Once time in a Database when initial
-# COPY data.sql ./src/main/resources/data.sql
+COPY data.sql ./src/main/resources/data.sql
 
 RUN mvn clean package -DskipTests
 
