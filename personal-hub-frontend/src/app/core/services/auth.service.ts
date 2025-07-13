@@ -38,7 +38,7 @@ export class AuthService {
     }
 
     initiateGoogleLogin(): void {
-        const googleOAuthUrl = `${API_CONFIG.baseUrl.replace('/api', '')}/oauth2/authorization/google`;
+        const googleOAuthUrl = 'http://hoangnguyen-dev.site/oauth2/authorization/google';
         window.location.href = googleOAuthUrl;
     }
 
@@ -49,7 +49,7 @@ export class AuthService {
     }
 
     initiateGithubLogin(): void {
-        const githubOAuthUrl = `${API_CONFIG.baseUrl.replace('/api', '')}/oauth2/authorization/github`;
+        const githubOAuthUrl = 'http://hoangnguyen-dev.site/oauth2/authorization/github';
         window.location.href = githubOAuthUrl;
     }
 
