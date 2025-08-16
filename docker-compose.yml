@@ -38,31 +38,31 @@ services:
     networks:
       - backend
 
-  # elasticsearch:
-  #   build:
-  #     context: ./personal-hub-backend/elasticsearch-analysis-vietnamese
-  #     args:
-  #       ES_VERSION: 8.7.0
-  #   container_name: elasticsearch
-  #   restart: unless-stopped
-  #   ports:
-  #     - "9200:9200"
-  #   ulimits:
-  #     nofile:
-  #       soft: 65536
-  #       hard: 65536
-  #     memlock:
-  #       hard: -1
-  #       soft: -1
-  #   environment:
-  #     - ES_JAVA_OPTS=-Xmx1g -Xms1g
-  #     - ELASTIC_USERNAME=${ELASTIC_USERNAME}
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #     - bootstrap.memory_lock=true
-  #     - discovery.type=single-node
-  #     - xpack.security.enabled=true
-  #   networks:
-  #     - backend
+  elasticsearch:
+    build:
+      context: hoangnguyen2003/personal-hub-elasticsearch:8.7.0
+      args:
+        ES_VERSION: 8.7.0
+    container_name: elasticsearch
+    restart: unless-stopped
+    ports:
+      - "9200:9200"
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+      memlock:
+        hard: -1
+        soft: -1
+    environment:
+      - ES_JAVA_OPTS=-Xmx1g -Xms1g
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+    networks:
+      - backend
 
   oracle-db:
     image: container-registry.oracle.com/database/free:latest
@@ -79,9 +79,6 @@ services:
       - backend
 
   backend:
-    # build:
-    #   context: ./personal-hub-backend
-    #   dockerfile: Dockerfile
     image: hoangnguyen2003/personal-hub-backend:latest
     container_name: ph-backend
     restart: unless-stopped

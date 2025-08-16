@@ -46,6 +46,14 @@ jobs:
         push: true
         tags: hoangnguyen2003/personal-hub-nginx:latest
 
+    - name: Build and Push Elasticsearch Docker Image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./personal-hub-backend/elasticsearch-analysis-vietnamese
+        file: ./personal-hub-backend/elasticsearch-analysis-vietnamese/Dockerfile
+        push: true
+        tags: hoangnguyen2003/personal-hub-elasticsearch:8.7.0
+
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
