@@ -17,9 +17,9 @@ public class WebConfig implements WebMvcConfigurer {
             public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                            "http://172.184.97.6:4200", 
+                            "http://40.81.16.188:4200", 
                             "http://localhost:4200",
-                            "http://172.184.97.6:8094",
+                            "http://40.81.16.188:8094",
                             "http://hoangnguyen-dev.site",
                             "http://www.hoangnguyen-dev.site"
                         )

@@ -44,7 +44,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOrigins(
                     "http://localhost:4200", 
-                    "http://172.184.97.6:4200",
+                    "http://40.81.16.188:4200",
                     "http://hoangnguyen-dev.site",
                     "http://www.hoangnguyen-dev.site"
                 )
