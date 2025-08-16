@@ -154,23 +154,23 @@ public class PostController {
      * @param sortDir sort direction (asc/desc)
      * @return paginated list of posts with the specified tag
      */
-//    @GetMapping("/tag/{tagName}")
-//    public ResponseEntity<PageResponse<PostResponse>> getPostsByTag(
-//            @PathVariable String tagName,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "20") int size,
-//            @RequestParam(defaultValue = "createdAt") String sortBy,
-//            @RequestParam(defaultValue = "desc") String sortDir
-//    ) {
-//        Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ?
-//                Sort.Direction.ASC : Sort.Direction.DESC;
-//
-//        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-////        Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
-//
-//        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
-//        return ResponseEntity.ok(response);
-//    }
+   @GetMapping("/tag/{tagName}")
+   public ResponseEntity<PageResponse<PostResponse>> getPostsByTag(
+           @PathVariable String tagName,
+           @RequestParam(defaultValue = "0") int page,
+           @RequestParam(defaultValue = "20") int size,
+           @RequestParam(defaultValue = "createdAt") String sortBy,
+           @RequestParam(defaultValue = "desc") String sortDir
+   ) {
+       Sort.Direction direction = "asc".equalsIgnoreCase(sortDir) ?
+               Sort.Direction.ASC : Sort.Direction.DESC;
+
+       Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+//        Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
+
+       PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
+       return ResponseEntity.ok(response);
+   }
 
     /**
      * Get autocomplete suggestions for tags based on prefix
@@ -178,11 +178,11 @@ public class PostController {
      * @param prefix the prefix to search for tag suggestions
      * @return list of suggested tag names
      */
-//    @GetMapping("/tag/autocomplete")
-//    public ResponseEntity<Set<String>> autocompleteTags(@RequestParam String prefix) {
-//        Set<String> suggestions = postService.autocompleteTags(prefix);
-//        return ResponseEntity.ok(suggestions);
-//    }
+   @GetMapping("/tag/autocomplete")
+   public ResponseEntity<Set<String>> autocompleteTags(@RequestParam String prefix) {
+       Set<String> suggestions = postService.autocompleteTags(prefix);
+       return ResponseEntity.ok(suggestions);
+   }
 
     /**
      * Update an existing post
@@ -191,27 +191,27 @@ public class PostController {
      * @param userDetail authenticated user details
      * @return updated post response
      */
-//    @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<PostResponse> updatePost(
-//            @PathVariable Long postId,
-//            @RequestParam("title") String title,
-//            @RequestParam("content") String content,
-//            @RequestParam("categoryID") Long categoryID,
-//            @RequestParam(value = "tagIDs", required = false) Set<Long> tagIDs,
-//            @RequestParam(value = "images", required = false) List<MultipartFile> images,
-//            @AuthenticationPrincipal CustomUserDetail userDetail
-//    ) {
-//        PostRequest postRequest = PostRequest.builder()
-//                .title(title)
-//                .content(content)
-//                .categoryID(categoryID)
-//                .tagIDs(tagIDs)
-//                .images(images)
-//                .build();
-//
-//        PostResponse postResponse = postService.updatePost(postId, postRequest, userDetail.getId());
-//        return ResponseEntity.ok(postResponse);
-//    }
+   @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+   public ResponseEntity<PostResponse> updatePost(
+           @PathVariable Long postId,
+           @RequestParam("title") String title,
+           @RequestParam("content") String content,
+           @RequestParam("categoryID") Long categoryID,
+           @RequestParam(value = "tagIDs", required = false) Set<Long> tagIDs,
+           @RequestParam(value = "images", required = false) List<MultipartFile> images,
+           @AuthenticationPrincipal CustomUserDetail userDetail
+   ) {
+       PostRequest postRequest = PostRequest.builder()
+               .title(title)
+               .content(content)
+               .categoryID(categoryID)
+               .tagIDs(tagIDs)
+               .images(images)
+               .build();
+
+       PostResponse postResponse = postService.updatePost(postId, postRequest, userDetail.getId());
+       return ResponseEntity.ok(postResponse);
+   }
 
     /**
      * Delete a post by its ID
@@ -235,19 +235,19 @@ public class PostController {
         return ResponseEntity.ok(postResponses);
     }
 
-//    @GetMapping("/suggest")
-//    public ResponseEntity<List<String>> getTitleSuggestions(@RequestParam String prefix) {
-//        List<String> suggestions = postService.autocompleteTitles(prefix);
-//        return ResponseEntity.ok(suggestions);
-//    }
+   @GetMapping("/suggest")
+   public ResponseEntity<List<String>> getTitleSuggestions(@RequestParam String prefix) {
+       List<String> suggestions = postService.autocompleteTitles(prefix);
+       return ResponseEntity.ok(suggestions);
+   }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<PageResponse<PostResponse>> searchPostByTitle(
-//            @RequestParam String query,
-//            Pageable pageable
-//    ){
-//        Page<PostResponse> postPage = postService.searchByTitle(query, pageable);
-//        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
-//        return ResponseEntity.ok(response);
-//    }
+   @GetMapping("/search")
+   public ResponseEntity<PageResponse<PostResponse>> searchPostByTitle(
+           @RequestParam String query,
+           Pageable pageable
+   ){
+       Page<PostResponse> postPage = postService.searchByTitle(query, pageable);
+       PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
+       return ResponseEntity.ok(response);
+   }
 }
