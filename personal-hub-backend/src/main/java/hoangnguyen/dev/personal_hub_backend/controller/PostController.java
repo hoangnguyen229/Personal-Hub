@@ -166,7 +166,7 @@ public class PostController {
                Sort.Direction.ASC : Sort.Direction.DESC;
 
        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
-//        Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
+       Page<PostResponse> postPage = postService.getPostsByTag(tagName, pageable);
 
        PageResponse<PostResponse> response = PageUtils.buildPageResponse(postPage);
        return ResponseEntity.ok(response);
