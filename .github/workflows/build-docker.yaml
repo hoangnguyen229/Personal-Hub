@@ -71,6 +71,11 @@ jobs:
       run: |
         ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << EOF
           docker login -u hoangnguyen2003 -p $DOCKER_HUB_TOKEN
+
+          if [ ! -d "/home/${{ secrets.SSH_USER }}/personal-hub/.git" ]; then
+            git clone https://github.com/hoangnguyen229/personal-hub.git
+          fi
+
           cd /home/${{ secrets.SSH_USER }}/personal-hub
           git pull origin main
           docker-compose pull
