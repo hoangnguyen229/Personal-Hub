@@ -182,43 +182,43 @@ public class PostServiceImpl implements PostService {
         return mapToPostResponse(savedPost);
     }
 
-   @Override
-   @Transactional
-   public PostResponse updatePost(Long postId, PostRequest postRequest, Long userId) {
-       Post post = postRepository.findById(postId)
-               .orElseThrow(() -> new ApiException(ErrorCodeEnum.POST_NOT_FOUND));
+//    @Override
+//    @Transactional
+//    public PostResponse updatePost(Long postId, PostRequest postRequest, Long userId) {
+//        Post post = postRepository.findById(postId)
+//                .orElseThrow(() -> new ApiException(ErrorCodeEnum.POST_NOT_FOUND));
 
-       if (post.getDeletedAt() != null) {
-           throw new ApiException(ErrorCodeEnum.POST_ALREADY_DELETED);
-       }
+//        if (post.getDeletedAt() != null) {
+//            throw new ApiException(ErrorCodeEnum.POST_ALREADY_DELETED);
+//        }
 
-       if (!post.getUser().getUserID().equals(userId)) {
-           throw new ApiException(ErrorCodeEnum.UNAUTHORIZED_OPERATION);
-       }
+//        if (!post.getUser().getUserID().equals(userId)) {
+//            throw new ApiException(ErrorCodeEnum.UNAUTHORIZED_OPERATION);
+//        }
 
-       Category category = categoryRepository.findById(postRequest.getCategoryID())
-               .orElseThrow(() -> new ApiException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
+//        Category category = categoryRepository.findById(postRequest.getCategoryID())
+//                .orElseThrow(() -> new ApiException(ErrorCodeEnum.CATEGORY_NOT_FOUND));
 
-       String newSlug = SlugUtils.toSlug(postRequest.getTitle());
-       if (!post.getSlug().equals(newSlug) && postRepository.findBySlug(newSlug).isPresent()) {
-           throw new ApiException(ErrorCodeEnum.POST_ALREADY_EXISTS);
-       }
-       post.setTitle(postRequest.getTitle());
-       post.setSlug(newSlug);
-       post.setContent(postRequest.getContent());
-       post.setCategory(category);
+//        String newSlug = SlugUtils.toSlug(postRequest.getTitle());
+//        if (!post.getSlug().equals(newSlug) && postRepository.findBySlug(newSlug).isPresent()) {
+//            throw new ApiException(ErrorCodeEnum.POST_ALREADY_EXISTS);
+//        }
+//        post.setTitle(postRequest.getTitle());
+//        post.setSlug(newSlug);
+//        post.setContent(postRequest.getContent());
+//        post.setCategory(category);
 
-       Set<Tag> tags = processPostTags(postRequest);
-       post.setTags(tags);
+//        Set<Tag> tags = processPostTags(postRequest);
+//        post.setTags(tags);
 
-//        updatePostImages(post, postRequest.getContent());
+// //        updatePostImages(post, postRequest.getContent());
 
-       post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+//        post.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
-       Post updatedPost = postRepository.save(post);
+//        Post updatedPost = postRepository.save(post);
 
-       return mapToPostResponse(updatedPost);
-   }
+//        return mapToPostResponse(updatedPost);
+//    }
 
     @Override
     public void deletePost(Long postId, Long userId) {
@@ -353,44 +353,44 @@ public class PostServiceImpl implements PostService {
     /**
      * Update post images
      */
-   private void updatePostImages(Post post, String content) {
-       // Lấy danh sách URL hình ảnh mới từ nội dung
-       Set<String> newImageUrls = imageService.extractImageUrls(content);
+//    private void updatePostImages(Post post, String content) {
+//        // Lấy danh sách URL hình ảnh mới từ nội dung
+//        Set<String> newImageUrls = imageService.extractImageUrls(content);
 
-       // Lấy danh sách hình ảnh hiện tại của bài viết
-       List<Image> currentImages = post.getImages() != null ? post.getImages() : new ArrayList<>();
+//        // Lấy danh sách hình ảnh hiện tại của bài viết
+//        List<Image> currentImages = post.getImages() != null ? post.getImages() : new ArrayList<>();
 
-       // Xóa các hình ảnh không còn được sử dụng
-       List<Image> imagesToRemove = currentImages.stream()
-               .filter(image -> !newImageUrls.contains(image.getImageUrl()))
-               .collect(Collectors.toList());
-       imagesToRemove.forEach(image -> {
-           imageRepository.delete(image);
-//            imageService.deleteImage(image.getImageUrl()); // Xóa file vật lý nếu cần
-       });
+//        // Xóa các hình ảnh không còn được sử dụng
+//        List<Image> imagesToRemove = currentImages.stream()
+//                .filter(image -> !newImageUrls.contains(image.getImageUrl()))
+//                .collect(Collectors.toList());
+//        imagesToRemove.forEach(image -> {
+//            imageRepository.delete(image);
+// //            imageService.deleteImage(image.getImageUrl()); // Xóa file vật lý nếu cần
+//        });
 
-       // Thêm hoặc cập nhật hình ảnh mới
-       List<Image> updatedImages = new ArrayList<>();
-       for (String imageUrl : newImageUrls) {
-           if (imageService.processImageFromTemp(imageUrl)) {
-               // Kiểm tra xem hình ảnh đã tồn tại trong bài viết chưa
-               Optional<Image> existingImage = currentImages.stream()
-                       .filter(image -> image.getImageUrl().equals(imageUrl))
-                       .findFirst();
-               if (existingImage.isEmpty()) {
-                   Image newImage = new Image();
-                   newImage.setImageUrl(imageUrl);
-                   newImage.setPost(post);
-                   updatedImages.add(imageRepository.save(newImage));
-               } else {
-                   updatedImages.add(existingImage.get());
-               }
-           }
-       }
+//        // Thêm hoặc cập nhật hình ảnh mới
+//        List<Image> updatedImages = new ArrayList<>();
+//        for (String imageUrl : newImageUrls) {
+//            if (imageService.processImageFromTemp(imageUrl)) {
+//                // Kiểm tra xem hình ảnh đã tồn tại trong bài viết chưa
+//                Optional<Image> existingImage = currentImages.stream()
+//                        .filter(image -> image.getImageUrl().equals(imageUrl))
+//                        .findFirst();
+//                if (existingImage.isEmpty()) {
+//                    Image newImage = new Image();
+//                    newImage.setImageUrl(imageUrl);
+//                    newImage.setPost(post);
+//                    updatedImages.add(imageRepository.save(newImage));
+//                } else {
+//                    updatedImages.add(existingImage.get());
+//                }
+//            }
+//        }
 
-       // Cập nhật danh sách hình ảnh của bài viết
-       post.setImages(updatedImages);
-   }
+//        // Cập nhật danh sách hình ảnh của bài viết
+//        post.setImages(updatedImages);
+//    }
 
     /**
      * Process and save post images
