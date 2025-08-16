@@ -39,10 +39,7 @@ services:
       - backend
 
   elasticsearch:
-    build:
-      context: hoangnguyen2003/personal-hub-elasticsearch:8.7.0
-      args:
-        ES_VERSION: 8.7.0
+    image: hoangnguyen2003/personal-hub-elasticsearch:8.7.0
     container_name: elasticsearch
     restart: unless-stopped
     ports:
