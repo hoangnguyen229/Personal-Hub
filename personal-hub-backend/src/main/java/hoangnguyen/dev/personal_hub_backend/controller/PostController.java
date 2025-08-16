@@ -191,27 +191,27 @@ public class PostController {
      * @param userDetail authenticated user details
      * @return updated post response
      */
-   @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-   public ResponseEntity<PostResponse> updatePost(
-           @PathVariable Long postId,
-           @RequestParam("title") String title,
-           @RequestParam("content") String content,
-           @RequestParam("categoryID") Long categoryID,
-           @RequestParam(value = "tagIDs", required = false) Set<Long> tagIDs,
-           @RequestParam(value = "images", required = false) List<MultipartFile> images,
-           @AuthenticationPrincipal CustomUserDetail userDetail
-   ) {
-       PostRequest postRequest = PostRequest.builder()
-               .title(title)
-               .content(content)
-               .categoryID(categoryID)
-               .tagIDs(tagIDs)
-               .images(images)
-               .build();
+//    @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<PostResponse> updatePost(
+//            @PathVariable Long postId,
+//            @RequestParam("title") String title,
+//            @RequestParam("content") String content,
+//            @RequestParam("categoryID") Long categoryID,
+//            @RequestParam(value = "tagIDs", required = false) Set<Long> tagIDs,
+//            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+//            @AuthenticationPrincipal CustomUserDetail userDetail
+//    ) {
+//        PostRequest postRequest = PostRequest.builder()
+//                .title(title)
+//                .content(content)
+//                .categoryID(categoryID)
+//                .tagIDs(tagIDs)
+//                .images(images)
+//                .build();
 
-       PostResponse postResponse = postService.updatePost(postId, postRequest, userDetail.getId());
-       return ResponseEntity.ok(postResponse);
-   }
+//        PostResponse postResponse = postService.updatePost(postId, postRequest, userDetail.getId());
+//        return ResponseEntity.ok(postResponse);
+//    }
 
     /**
      * Delete a post by its ID
