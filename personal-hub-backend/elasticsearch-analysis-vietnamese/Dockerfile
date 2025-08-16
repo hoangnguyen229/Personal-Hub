@@ -1,8 +1,8 @@
-ARG ES_VERSION
-FROM docker.elastic.co/elasticsearch/elasticsearch:$ES_VERSION as builder
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.7.0 AS builder
 
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
+ENV ES_VERSION=8.7.0
 
 RUN apt-get update -y && apt-get install -y software-properties-common build-essential
 RUN gcc --version
@@ -28,19 +28,20 @@ RUN wget https://dlcdn.apache.org/maven/maven-3/3.8.9/binaries/apache-maven-3.8.
 ENV MVN_HOME=/tmp/apache-maven-3.8.9
 ENV PATH=$MVN_HOME/bin:$PATH
 
-ARG ES_VERSION
 COPY . /tmp/elasticsearch-analysis-vietnamese
 WORKDIR /tmp/elasticsearch-analysis-vietnamese
 RUN mvn verify clean --fail-never
-RUN mvn --batch-mode -Dmaven.test.skip -e package -DprojectVersion=$ES_VERSION
+RUN mvn --batch-mode -Dmaven.test.skip -e package -DprojectVersion=${ES_VERSION}
 
-FROM docker.elastic.co/elasticsearch/elasticsearch:$ES_VERSION
-ARG ES_VERSION
+# ===== Stage 2: Final image =====
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+ENV ES_VERSION=8.7.0
 ARG COCCOC_INSTALL_PATH=/usr/local
 ARG COCCOC_DICT_PATH=$COCCOC_INSTALL_PATH/share/tokenizer/dicts
 
 COPY --from=builder $COCCOC_INSTALL_PATH/lib/libcoccoc_tokenizer_jni.so /usr/lib
 COPY --from=builder $COCCOC_DICT_PATH $COCCOC_DICT_PATH
-COPY --from=builder /tmp/elasticsearch-analysis-vietnamese/target/releases/elasticsearch-analysis-vietnamese-$ES_VERSION.zip /
-RUN echo "Y" | /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch file:///elasticsearch-analysis-vietnamese-$ES_VERSION.zip
+COPY --from=builder /tmp/elasticsearch-analysis-vietnamese/target/releases/elasticsearch-analysis-vietnamese-${ES_VERSION}.zip /
+
+RUN echo "Y" | /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch file:///elasticsearch-analysis-vietnamese-${ES_VERSION}.zip
 RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch analysis-icu
