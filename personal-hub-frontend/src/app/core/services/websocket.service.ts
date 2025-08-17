@@ -46,9 +46,9 @@ export class WebSocketService {
       },
       debug: (str) => console.log("STOMP Debug:", str),
       onConnect: () => {
-        console.log('Successfully connected to WebSocket server');
+        // console.log('Successfully connected to WebSocket server');
         if (this.stompClient?.connected) {
-          console.log("Connection status verified as connected for user:", this.authService.getCurrentUser()?.user_id);
+          // console.log("Connection status verified as connected for user:", this.authService.getCurrentUser()?.user_id);
           this.subscribeToNotifications();
           this.subscribeToMessages();
           this.subscribeToUserStatus();
@@ -72,7 +72,7 @@ export class WebSocketService {
     if (this.stompClient && this.stompClient.connected) {
       const userEmail = this.authService.getCurrentUser()?.email;
       if (userEmail) {
-        console.log("Subscribing to:", `/user/${userEmail}/queue/notifications`);
+        // console.log("Subscribing to:", `/user/${userEmail}/queue/notifications`);
         this.stompClient.subscribe(`/user/queue/notifications`, (message) => {
           try {
             const notification: Notification = JSON.parse(message.body);
@@ -94,7 +94,7 @@ export class WebSocketService {
     if (this.stompClient && this.stompClient.connected) {
       const userEmail = this.authService.getCurrentUser()?.email;
       if (userEmail) {
-        console.log("Subscribing MESSAGE channel to:", `/user/${userEmail}/queue/messages`);
+        // console.log("Subscribing MESSAGE channel to:", `/user/${userEmail}/queue/messages`);
         this.stompClient.subscribe(`/user/queue/messages`, (message) => {
           try {
             const newMessage: Messages = JSON.parse(message.body);
@@ -114,7 +114,7 @@ export class WebSocketService {
   private subscribeToUserStatus(): void {
     if (this.stompClient && this.stompClient.connected) {
       const currentUserId = this.authService.getCurrentUser()?.user_id;
-      console.log("Subscribing to user status channel: /topic/user_status_channel for user:", currentUserId);
+      // console.log("Subscribing to user status channel: /topic/user_status_channel for user:", currentUserId);
       this.stompClient.subscribe(`/topic/user_status_channel`, (message) => {
         try {
           const user: User = JSON.parse(message.body);
@@ -122,7 +122,7 @@ export class WebSocketService {
 
           // Không cập nhật trạng thái của người dùng hiện tại
           if (currentUserId && user.user_id === currentUserId) {
-            console.log(`Skipping status update for current user: ${user.user_id}`);
+            // console.log(`Skipping status update for current user: ${user.user_id}`);
             return;
           }
 
@@ -136,7 +136,6 @@ export class WebSocketService {
           const updatedUsers = currentUsers.filter(u => u.user_id !== user.user_id);
           updatedUsers.push({ ...user, is_online: user.is_online });
 
-          console.log("Updated user status list:", updatedUsers);
           this.userStatusSubject.next(updatedUsers);
         } catch (e) {
           console.error("Error parsing user status message:", e);
